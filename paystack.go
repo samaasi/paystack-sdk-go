@@ -3,6 +3,7 @@ package paystacksdkgo
 import (
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 	"github.com/samaasi/paystack-sdk-go/service/transaction"
+	"github.com/samaasi/paystack-sdk-go/service/transfer"
 )
 
 // NewClient creates a new Paystack client with the given secret key.
@@ -28,6 +29,7 @@ func NewClient(secretKey string, opts ...ClientOption) *Client {
 
 	// Initialize services
 	c.Transaction = transaction.NewClient(backendClient)
+	c.Transfer = transfer.NewClient(backendClient)
 
 	return c
 }
