@@ -3,6 +3,8 @@ package paystacksdkgo
 import (
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 	applepay "github.com/samaasi/paystack-sdk-go/service/apple-pay"
+	bulkcharges "github.com/samaasi/paystack-sdk-go/service/bulk-charges"
+	charges "github.com/samaasi/paystack-sdk-go/service/charges"
 	"github.com/samaasi/paystack-sdk-go/service/transaction"
 	"github.com/samaasi/paystack-sdk-go/service/transfer"
 )
@@ -32,6 +34,8 @@ func NewClient(secretKey string, opts ...ClientOption) *Client {
 	c.Transaction = transaction.NewClient(backendClient)
 	c.Transfer = transfer.NewClient(backendClient)
 	c.ApplePay = applepay.NewClient(backendClient)
+	c.BulkCharges = bulkcharges.NewClient(backendClient)
+	c.Charges = charges.NewClient(backendClient)
 
 	return c
 }
