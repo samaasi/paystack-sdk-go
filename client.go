@@ -7,6 +7,7 @@ import (
 	"github.com/samaasi/paystack-sdk-go/service/charges"
 	"github.com/samaasi/paystack-sdk-go/service/customers"
 	"github.com/samaasi/paystack-sdk-go/service/disputes"
+	"github.com/samaasi/paystack-sdk-go/service/integration"
 	"github.com/samaasi/paystack-sdk-go/service/transaction"
 	"github.com/samaasi/paystack-sdk-go/service/transfer"
 )
@@ -33,6 +34,9 @@ type Client struct {
 
 	// Disputes service for handling dispute operations
 	Disputes *disputes.Client
+
+	// Integration service for handling integration operations
+	Integration *integration.Client
 
 	// internal backend client
 	backend *backend.Client
