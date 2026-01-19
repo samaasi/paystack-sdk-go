@@ -5,6 +5,8 @@ import (
 	applepay "github.com/samaasi/paystack-sdk-go/service/apple-pay"
 	bulkcharges "github.com/samaasi/paystack-sdk-go/service/bulk-charges"
 	"github.com/samaasi/paystack-sdk-go/service/charges"
+	"github.com/samaasi/paystack-sdk-go/service/customers"
+	"github.com/samaasi/paystack-sdk-go/service/disputes"
 	"github.com/samaasi/paystack-sdk-go/service/transaction"
 	"github.com/samaasi/paystack-sdk-go/service/transfer"
 )
@@ -25,6 +27,12 @@ type Client struct {
 
 	// Charges service for handling charge operations
 	Charges *charges.Client
+
+	// Customers service for handling customer operations
+	Customers *customers.Client
+
+	// Disputes service for handling dispute operations
+	Disputes *disputes.Client
 
 	// internal backend client
 	backend *backend.Client
