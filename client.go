@@ -8,17 +8,17 @@ import (
 	"github.com/samaasi/paystack-sdk-go/service/customers"
 	"github.com/samaasi/paystack-sdk-go/service/disputes"
 	"github.com/samaasi/paystack-sdk-go/service/integration"
-	"github.com/samaasi/paystack-sdk-go/service/transaction"
-	"github.com/samaasi/paystack-sdk-go/service/transfer"
+	"github.com/samaasi/paystack-sdk-go/service/transactions"
+	"github.com/samaasi/paystack-sdk-go/service/transfers"
 )
 
 // Client is the main entry point for the Paystack SDK.
 type Client struct {
 	// Transaction service for handling transaction-related operations
-	Transaction *transaction.Client
+	Transactions *transactions.Client
 
 	// Transfer service for handling transfer-related operations
-	Transfer *transfer.Client
+	Transfers *transfers.Client
 
 	// ApplePay service for handling Apple Pay-related operations
 	ApplePay *applepay.Client

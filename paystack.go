@@ -8,8 +8,8 @@ import (
 	"github.com/samaasi/paystack-sdk-go/service/customers"
 	"github.com/samaasi/paystack-sdk-go/service/disputes"
 	"github.com/samaasi/paystack-sdk-go/service/integration"
-	"github.com/samaasi/paystack-sdk-go/service/transaction"
-	"github.com/samaasi/paystack-sdk-go/service/transfer"
+	"github.com/samaasi/paystack-sdk-go/service/transactions"
+	"github.com/samaasi/paystack-sdk-go/service/transfers"
 )
 
 // NewClient creates a new Paystack client with the given secret key.
@@ -34,8 +34,8 @@ func NewClient(secretKey string, opts ...ClientOption) *Client {
 	}
 
 	// Initialize services
-	c.Transaction = transaction.NewClient(backendClient)
-	c.Transfer = transfer.NewClient(backendClient)
+	c.Transactions = transactions.NewClient(backendClient)
+	c.Transfers = transfers.NewClient(backendClient)
 	c.ApplePay = applepay.NewClient(backendClient)
 	c.BulkCharges = bulkcharges.NewClient(backendClient)
 	c.Charges = charges.NewClient(backendClient)
