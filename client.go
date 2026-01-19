@@ -2,6 +2,7 @@ package paystacksdkgo
 
 import (
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
+	applepay "github.com/samaasi/paystack-sdk-go/service/apple-pay"
 	"github.com/samaasi/paystack-sdk-go/service/transaction"
 	"github.com/samaasi/paystack-sdk-go/service/transfer"
 )
@@ -13,6 +14,9 @@ type Client struct {
 
 	// Transfer service for handling transfer-related operations
 	Transfer *transfer.Client
+
+	// ApplePay service for handling Apple Pay-related operations
+	ApplePay *applepay.Client
 
 	// internal backend client
 	backend *backend.Client
