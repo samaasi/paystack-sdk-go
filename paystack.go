@@ -8,6 +8,8 @@ import (
 	"github.com/samaasi/paystack-sdk-go/service/customers"
 	"github.com/samaasi/paystack-sdk-go/service/disputes"
 	"github.com/samaasi/paystack-sdk-go/service/integration"
+	paymentPages "github.com/samaasi/paystack-sdk-go/service/payment-pages"
+	paymentRequests "github.com/samaasi/paystack-sdk-go/service/payment-requests"
 	"github.com/samaasi/paystack-sdk-go/service/transactions"
 	"github.com/samaasi/paystack-sdk-go/service/transfers"
 )
@@ -42,6 +44,8 @@ func NewClient(secretKey string, opts ...ClientOption) *Client {
 	c.Customers = customers.NewClient(backendClient)
 	c.Disputes = disputes.NewClient(backendClient)
 	c.Integration = integration.NewClient(backendClient)
+	c.PaymentPages = paymentPages.NewClient(backendClient)
+	c.PaymentRequests = paymentRequests.NewClient(backendClient)
 
 	return c
 }

@@ -8,6 +8,8 @@ import (
 	"github.com/samaasi/paystack-sdk-go/service/customers"
 	"github.com/samaasi/paystack-sdk-go/service/disputes"
 	"github.com/samaasi/paystack-sdk-go/service/integration"
+	paymentPages "github.com/samaasi/paystack-sdk-go/service/payment-pages"
+	paymentRequests "github.com/samaasi/paystack-sdk-go/service/payment-requests"
 	"github.com/samaasi/paystack-sdk-go/service/transactions"
 	"github.com/samaasi/paystack-sdk-go/service/transfers"
 )
@@ -28,6 +30,12 @@ type Client struct {
 
 	// Charges service for handling charge operations
 	Charges *charges.Client
+
+	// PaymentPages service for handling payment page operations
+	PaymentPages *paymentPages.Client
+
+	// PaymentRequests service for handling payment request operations
+	PaymentRequests *paymentRequests.Client
 
 	// Customers service for handling customer operations
 	Customers *customers.Client
