@@ -8,6 +8,7 @@ import (
 	"github.com/samaasi/paystack-sdk-go/service/customers"
 	"github.com/samaasi/paystack-sdk-go/service/disputes"
 	"github.com/samaasi/paystack-sdk-go/service/integration"
+	"github.com/samaasi/paystack-sdk-go/service/misc"
 	paymentPages "github.com/samaasi/paystack-sdk-go/service/payment-pages"
 	paymentRequests "github.com/samaasi/paystack-sdk-go/service/payment-requests"
 	"github.com/samaasi/paystack-sdk-go/service/plans"
@@ -97,6 +98,9 @@ type Client struct {
 
 	// TransferRecipients service for handling transfer recipients
 	TransferRecipients *transferRecipients.Client
+
+	// Misc service for handling miscellaneous operations
+	Misc *misc.Client
 
 	// internal backend client
 	backend *backend.Client
