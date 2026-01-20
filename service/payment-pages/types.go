@@ -7,32 +7,32 @@ import (
 
 // Page represents a payment page
 type Page struct {
-	ID          int             `json:"id"`
-	Integration int             `json:"integration"`
-	Domain      string          `json:"domain"`
-	Name        string          `json:"name"`
-	Description string          `json:"description"`
-	Amount      int             `json:"amount"`
-	Currency    string          `json:"currency"`
-	Slug        string          `json:"slug"`
-	Active      bool            `json:"active"`
-	RedirectURL string          `json:"redirect_url"`
-	CustomFields []interface{}  `json:"custom_fields"`
-	Type        string          `json:"type"`
-	Metadata    json.RawMessage `json:"metadata"`
-	CreatedAt   string          `json:"created_at"`
-	UpdatedAt   string          `json:"updated_at"`
+	ID           int             `json:"id"`
+	Integration  int             `json:"integration"`
+	Domain       string          `json:"domain"`
+	Name         string          `json:"name"`
+	Description  string          `json:"description"`
+	Amount       int             `json:"amount"`
+	Currency     string          `json:"currency"`
+	Slug         string          `json:"slug"`
+	Active       bool            `json:"active"`
+	RedirectURL  string          `json:"redirect_url"`
+	CustomFields []interface{}   `json:"custom_fields"`
+	Type         string          `json:"type"`
+	Metadata     json.RawMessage `json:"metadata"`
+	CreatedAt    string          `json:"created_at"`
+	UpdatedAt    string          `json:"updated_at"`
 }
 
 // CreatePageRequest represents the request to create a payment page
 type CreatePageRequest struct {
-	Name         string      `json:"name"`
-	Description  string      `json:"description,omitempty"`
-	Amount       int         `json:"amount,omitempty"`
-	Slug         string      `json:"slug,omitempty"`
-	RedirectURL  string      `json:"redirect_url,omitempty"`
+	Name         string        `json:"name"`
+	Description  string        `json:"description,omitempty"`
+	Amount       int           `json:"amount,omitempty"`
+	Slug         string        `json:"slug,omitempty"`
+	RedirectURL  string        `json:"redirect_url,omitempty"`
 	CustomFields []interface{} `json:"custom_fields,omitempty"`
-	Metadata     interface{} `json:"metadata,omitempty"`
+	Metadata     interface{}   `json:"metadata,omitempty"`
 }
 
 // PageResponse represents the response for a single page

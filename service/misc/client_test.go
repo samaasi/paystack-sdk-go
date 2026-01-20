@@ -123,7 +123,7 @@ func TestResolveCardBIN(t *testing.T) {
 			"status":  true,
 			"message": "BIN resolved",
 			"data": map[string]interface{}{
-				"bin": "123456",
+				"bin":   "123456",
 				"brand": "Visa",
 			},
 		})
@@ -164,7 +164,7 @@ func TestResolveAccount(t *testing.T) {
 			"message": "Account resolved",
 			"data": map[string]interface{}{
 				"account_number": "1234567890",
-				"account_name": "Test Account",
+				"account_name":   "Test Account",
 			},
 		})
 	}))

@@ -17,7 +17,7 @@ test-race:
 
 # Format code (as required by CONTRIBUTING.md)
 fmt:
-	go fmt ./...
+	gofmt -s -w .
 
 # Static analysis (as required by CONTRIBUTING.md)
 vet:
@@ -27,6 +27,6 @@ vet:
 clean:
 	go clean ./...
 
-# Add this to your Makefile
+# Run linter
 lint:
 	golangci-lint run

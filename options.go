@@ -32,4 +32,3 @@ func WithMaxRetries(retries int) ClientOption {
 func WithTimeout(timeout time.Duration) ClientOption {
 	return backend.WithTimeout(timeout)
 }
-

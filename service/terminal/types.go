@@ -6,24 +6,24 @@ import (
 )
 
 type Terminal struct {
-	ID              int             `json:"id"`
-	Serial          string          `json:"serial"`
-	DeviceType      string          `json:"device_type"`
-	TerminalID      string          `json:"terminal_id"`
-	Integration     int             `json:"integration"`
-	Domain          string          `json:"domain"`
-	Name            string          `json:"name"`
-	Address         string          `json:"address"`
-	Status          string          `json:"status"`
+	ID          int    `json:"id"`
+	Serial      string `json:"serial"`
+	DeviceType  string `json:"device_type"`
+	TerminalID  string `json:"terminal_id"`
+	Integration int    `json:"integration"`
+	Domain      string `json:"domain"`
+	Name        string `json:"name"`
+	Address     string `json:"address"`
+	Status      string `json:"status"`
 }
 
 type TerminalEvent struct {
-	ID              string          `json:"id"`
-	TerminalID      string          `json:"terminal_id"`
-	Type            string          `json:"type"`
-	Action          string          `json:"action"`
-	Data            json.RawMessage `json:"data"`
-	Status          string          `json:"status"`
+	ID         string          `json:"id"`
+	TerminalID string          `json:"terminal_id"`
+	Type       string          `json:"type"`
+	Action     string          `json:"action"`
+	Data       json.RawMessage `json:"data"`
+	Status     string          `json:"status"`
 }
 
 type SendEventRequest struct {
@@ -51,7 +51,7 @@ type TerminalEventResponse struct {
 
 type TerminalPresenceResponse struct {
 	paystackapi.Response[struct {
-		Online    bool   `json:"online"`
-		Available bool   `json:"available"`
+		Online    bool `json:"online"`
+		Available bool `json:"available"`
 	}]
 }

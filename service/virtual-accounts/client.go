@@ -32,7 +32,7 @@ func (c *Client) List(ctx context.Context, req *ListVirtualAccountsRequest) (*Li
 	if err != nil {
 		return nil, err
 	}
-	
+
 	path := "/dedicated_account"
 	if queryParams != "" {
 		path += "?" + queryParams
