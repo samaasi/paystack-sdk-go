@@ -46,6 +46,18 @@ func WithHTTPClient(client *http.Client) ClientOption {
 	}
 }
 
+func WithMaxRetries(retries int) ClientOption {
+	return func(c *Client) {
+		c.backoff.MaxRetries = retries
+	}
+}
+
+func WithTimeout(timeout time.Duration) ClientOption {
+	return func(c *Client) {
+		c.httpClient.Timeout = timeout
+	}
+}
+
 // Call makes an HTTP request and decodes the response into v.
 func (c *Client) Call(ctx context.Context, method, path string, body, v interface{}) error {
 	url := c.baseURL + path
