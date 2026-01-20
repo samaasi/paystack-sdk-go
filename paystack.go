@@ -20,6 +20,8 @@ import (
 	"github.com/samaasi/paystack-sdk-go/service/subscriptions"
 	"github.com/samaasi/paystack-sdk-go/service/terminal"
 	"github.com/samaasi/paystack-sdk-go/service/transactions"
+	transferControl "github.com/samaasi/paystack-sdk-go/service/transfer-control"
+	transferRecipients "github.com/samaasi/paystack-sdk-go/service/transfer-recipients"
 	"github.com/samaasi/paystack-sdk-go/service/transfers"
 	"github.com/samaasi/paystack-sdk-go/service/verification"
 	virtualAccounts "github.com/samaasi/paystack-sdk-go/service/virtual-accounts"
@@ -68,6 +70,8 @@ func NewClient(secretKey string, opts ...ClientOption) *Client {
 	c.Subscriptions = subscriptions.NewClient(backendClient)
 	c.Verification = verification.NewClient(backendClient)
 	c.VirtualAccounts = virtualAccounts.NewClient(backendClient)
+	c.TransferControl = transferControl.NewClient(backendClient)
+	c.TransferRecipients = transferRecipients.NewClient(backendClient)
 
 	return c
 }

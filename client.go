@@ -20,6 +20,8 @@ import (
 	"github.com/samaasi/paystack-sdk-go/service/subscriptions"
 	"github.com/samaasi/paystack-sdk-go/service/terminal"
 	"github.com/samaasi/paystack-sdk-go/service/transactions"
+	transferControl "github.com/samaasi/paystack-sdk-go/service/transfer-control"
+	transferRecipients "github.com/samaasi/paystack-sdk-go/service/transfer-recipients"
 	"github.com/samaasi/paystack-sdk-go/service/transfers"
 	"github.com/samaasi/paystack-sdk-go/service/verification"
 	virtualAccounts "github.com/samaasi/paystack-sdk-go/service/virtual-accounts"
@@ -89,6 +91,12 @@ type Client struct {
 
 	// VirtualAccounts service for handling virtual accounts
 	VirtualAccounts *virtualAccounts.Client
+
+	// TransferControl service for handling transfer control
+	TransferControl *transferControl.Client
+
+	// TransferRecipients service for handling transfer recipients
+	TransferRecipients *transferRecipients.Client
 
 	// internal backend client
 	backend *backend.Client
