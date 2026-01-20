@@ -30,7 +30,11 @@ func TestListBanks(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(ts.URL)))
-	resp, err := client.ListBanks(context.Background(), "NG", 10, 1)
+	resp, err := client.ListBanks(context.Background(), &ListBanksParams{
+		Country: "NG",
+		PerPage: 10,
+		Page:    1,
+	})
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}

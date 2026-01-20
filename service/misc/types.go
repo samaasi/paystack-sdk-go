@@ -3,31 +3,37 @@ package misc
 import "github.com/samaasi/paystack-sdk-go/paystackapi"
 
 type Bank struct {
-	ID            int    `json:"id"`
-	Name          string `json:"name"`
-	Slug          string `json:"slug"`
-	Code          string `json:"code"`
-	Longcode      string `json:"longcode"`
-	Gateway       string `json:"gateway"`
-	PayWithBank   bool   `json:"pay_with_bank"`
-	Active        bool   `json:"active"`
-	Country       string `json:"country"`
-	Currency      string `json:"currency"`
-	Type          string `json:"type"`
-	IsDeleted     bool   `json:"is_deleted"`
-	CreatedAt     string `json:"created_at"`
-	UpdatedAt     string `json:"updated_at"`
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Slug        string `json:"slug"`
+	Code        string `json:"code"`
+	Longcode    string `json:"longcode"`
+	Gateway     string `json:"gateway"`
+	PayWithBank bool   `json:"pay_with_bank"`
+	Active      bool   `json:"active"`
+	Country     string `json:"country"`
+	Currency    string `json:"currency"`
+	Type        string `json:"type"`
+	IsDeleted   bool   `json:"is_deleted"`
+	CreatedAt   string `json:"created_at"`
+	UpdatedAt   string `json:"updated_at"`
 }
 
 type ListBanksResponse struct {
 	paystackapi.Response[[]Bank]
 }
 
+type ListBanksParams struct {
+	Country string `query:"country"`
+	PerPage int    `query:"perPage"`
+	Page    int    `query:"page"`
+}
+
 type Country struct {
-	ID                  int    `json:"id"`
-	Name                string `json:"name"`
-	ISOCode             string `json:"iso_code"`
-	DefaultCurrencyCode string `json:"default_currency_code"`
+	ID                  int         `json:"id"`
+	Name                string      `json:"name"`
+	ISOCode             string      `json:"iso_code"`
+	DefaultCurrencyCode string      `json:"default_currency_code"`
 	IntegrationDefaults interface{} `json:"integration_defaults"`
 	Relationships       interface{} `json:"relationships"`
 }

@@ -3,8 +3,6 @@ package misc
 import (
 	"context"
 	"fmt"
-	"net/url"
-	"strconv"
 
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 )
@@ -17,21 +15,16 @@ func NewClient(backend *backend.Client) *Client {
 	return &Client{backend: backend}
 }
 
-func (c *Client) ListBanks(ctx context.Context, country string, perPage, page int) (*ListBanksResponse, error) {
-	v := url.Values{}
-	if country != "" {
-		v.Add("country", country)
-	}
-	if perPage > 0 {
-		v.Add("perPage", strconv.Itoa(perPage))
-	}
-	if page > 0 {
-		v.Add("page", strconv.Itoa(page))
-	}
-	
+func (c *Client) ListBanks(ctx context.Context, params *ListBanksParams) (*ListBanksResponse, error) {
 	path := "/bank"
-	if len(v) > 0 {
-		path = fmt.Sprintf("%s?%s", path, v.Encode())
+	if params != nil {
+		query, err := backend.EncodeQueryParams(params)
+		if err != nil {
+			return nil, err
+		}
+		if query != "" {
+			path = fmt.Sprintf("%s?%s", path, query)
+		}
 	}
 
 	resp := &ListBanksResponse{}
