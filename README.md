@@ -37,9 +37,22 @@ func main() {
 	client := paystack.NewClient(apiKey)
 	
 	// You can also pass options
-	// client := paystack.NewClient(apiKey, paystack.WithBaseURL("https://api.paystack.co"))
+	// client := paystack.NewClient(apiKey, 
+	//     paystack.WithBaseURL("https://api.paystack.co"),
+	//     paystack.WithMaxRetries(5),
+	//     paystack.WithTimeout(10 * time.Second),
+	// )
 }
 ```
+
+### Configuration
+
+You can configure the client with the following options:
+
+- `WithBaseURL(url string)`: Override the default Paystack API base URL.
+- `WithMaxRetries(retries int)`: Set the maximum number of retries for failed requests (default: 3).
+- `WithTimeout(timeout time.Duration)`: Set the timeout for HTTP requests (default: 30s).
+- `WithHTTPClient(client *http.Client)`: Use a custom HTTP client.
 
 ### Making Requests
 
