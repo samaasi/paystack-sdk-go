@@ -51,7 +51,21 @@ func (c *Client) Call(ctx context.Context, method, path string, body, v interfac
 	url := c.baseURL + path
 
 	op := func() error {
-		req, err := NewRequest(method, url, c.apiKey, body, nil)
+		// Extract headers from context
+		headers := paystackapi.GetCustomHeaders(ctx)
+		if headers == nil {
+			headers = make(map[string]string)
+		}
+
+		if idempotencyKey := paystackapi.GetIdempotencyKey(ctx); idempotencyKey != "" {
+			headers["Idempotency-Key"] = idempotencyKey
+		}
+
+		reqOpts := &RequestOptions{
+			Headers: headers,
+		}
+
+		req, err := NewRequest(method, url, c.apiKey, body, reqOpts)
 		if err != nil {
 			return err
 		}
