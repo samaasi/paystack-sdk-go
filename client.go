@@ -16,6 +16,9 @@ import (
 	"github.com/samaasi/paystack-sdk-go/service/settlements"
 	"github.com/samaasi/paystack-sdk-go/service/splits"
 	"github.com/samaasi/paystack-sdk-go/service/status"
+	"github.com/samaasi/paystack-sdk-go/service/subaccounts"
+	"github.com/samaasi/paystack-sdk-go/service/subscriptions"
+	"github.com/samaasi/paystack-sdk-go/service/terminal"
 	"github.com/samaasi/paystack-sdk-go/service/transactions"
 	"github.com/samaasi/paystack-sdk-go/service/transfers"
 )
@@ -69,6 +72,15 @@ type Client struct {
 
 	// Status service for handling status
 	Status *status.Client
+
+	// Subaccounts service for handling subaccounts
+	Subaccounts *subaccounts.Client
+
+	// Subscriptions service for handling subscriptions
+	Subscriptions *subscriptions.Client
+
+	// Terminal service for handling terminal
+	Terminal *terminal.Client
 
 	// internal backend client
 	backend *backend.Client
