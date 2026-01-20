@@ -19,10 +19,12 @@ func Decode(resp *http.Response, v interface{}) error {
 		if err := json.NewDecoder(resp.Body).Decode(&apiErr); err != nil {
 			// Fallback for non-JSON errors or decode failures
 			return &paystackapi.APIError{
-				Status:  false,
-				Message: fmt.Sprintf("HTTP %d: %s", resp.StatusCode, http.StatusText(resp.StatusCode)),
+				Status:     false,
+				Message:    fmt.Sprintf("HTTP %d: %s", resp.StatusCode, http.StatusText(resp.StatusCode)),
+				StatusCode: resp.StatusCode,
 			}
 		}
+		apiErr.StatusCode = resp.StatusCode
 		return &apiErr
 	}
 
