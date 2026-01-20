@@ -21,6 +21,8 @@ import (
 	"github.com/samaasi/paystack-sdk-go/service/terminal"
 	"github.com/samaasi/paystack-sdk-go/service/transactions"
 	"github.com/samaasi/paystack-sdk-go/service/transfers"
+	"github.com/samaasi/paystack-sdk-go/service/verification"
+	virtualAccounts "github.com/samaasi/paystack-sdk-go/service/virtual-accounts"
 )
 
 // Client is the main entry point for the Paystack SDK.
@@ -81,6 +83,12 @@ type Client struct {
 
 	// Terminal service for handling terminal
 	Terminal *terminal.Client
+
+	// Verification service for handling verification
+	Verification *verification.Client
+
+	// VirtualAccounts service for handling virtual accounts
+	VirtualAccounts *virtualAccounts.Client
 
 	// internal backend client
 	backend *backend.Client

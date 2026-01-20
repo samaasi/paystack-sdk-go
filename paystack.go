@@ -21,6 +21,8 @@ import (
 	"github.com/samaasi/paystack-sdk-go/service/terminal"
 	"github.com/samaasi/paystack-sdk-go/service/transactions"
 	"github.com/samaasi/paystack-sdk-go/service/transfers"
+	"github.com/samaasi/paystack-sdk-go/service/verification"
+	virtualAccounts "github.com/samaasi/paystack-sdk-go/service/virtual-accounts"
 )
 
 // NewClient creates a new Paystack client with the given secret key.
@@ -64,6 +66,8 @@ func NewClient(secretKey string, opts ...ClientOption) *Client {
 	c.Terminal = terminal.NewClient(backendClient)
 	c.Subaccounts = subaccounts.NewClient(backendClient)
 	c.Subscriptions = subscriptions.NewClient(backendClient)
+	c.Verification = verification.NewClient(backendClient)
+	c.VirtualAccounts = virtualAccounts.NewClient(backendClient)
 
 	return c
 }
