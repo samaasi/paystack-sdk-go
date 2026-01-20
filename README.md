@@ -1,5 +1,9 @@
 # Paystack SDK for Go
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/samaasi/paystack-sdk-go.svg)](https://pkg.go.dev/github.com/samaasi/paystack-sdk-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/samaasi/paystack-sdk-go)](https://goreportcard.com/report/github.com/samaasi/paystack-sdk-go)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A comprehensive and robust Go SDK for the [Paystack API](https://paystack.com/docs/api/). This library provides a clean, idiomatic Go interface for integrating Paystack payments into your applications.
 
 ## Features
