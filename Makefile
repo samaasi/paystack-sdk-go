@@ -26,3 +26,7 @@ vet:
 # Clean build artifacts
 clean:
 	go clean ./...
+
+# Add this to your Makefile
+lint:
+	golangci-lint run
