@@ -151,7 +151,9 @@ ctx := paystackapi.WithCustomHeader(context.Background(), "X-Custom-Header", "Va
 
 ## Contributing
 
-Contributions are welcome! Please follow these steps:
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+To get started:
 
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature/amazing-feature`).
