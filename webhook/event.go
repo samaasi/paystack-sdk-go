@@ -37,6 +37,32 @@ type Event struct {
 	Data  json.RawMessage `json:"data"`
 }
 
+// ParseEvent parses the JSON body into a generic Event struct.
+// After parsing, you can inspect the Event field to determine the event type
+// and then use the UnmarshalData helper to parse the Data field.
+func ParseEvent(body []byte) (*Event, error) {
+	var event Event
+	if err := json.Unmarshal(body, &event); err != nil {
+		return nil, err
+	}
+	return &event, nil
+}
+
+// UnmarshalData unmarshals the event data into the provided target struct.
+//
+// Example:
+//
+//	event, _ := webhook.ParseEvent(body)
+//	if event.Event == webhook.EventChargeSuccess {
+//	    var data webhook.ChargeSuccessEvent
+//	    if err := event.UnmarshalData(&data); err != nil {
+//	        // handle error
+//	    }
+//	}
+func (e *Event) UnmarshalData(v interface{}) error {
+	return json.Unmarshal(e.Data, v)
+}
+
 // ChargeSuccessEvent represents the data for a charge.success event
 type ChargeSuccessEvent struct {
 	ID              int             `json:"id"`
