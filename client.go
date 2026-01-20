@@ -10,6 +10,9 @@ import (
 	"github.com/samaasi/paystack-sdk-go/service/integration"
 	paymentPages "github.com/samaasi/paystack-sdk-go/service/payment-pages"
 	paymentRequests "github.com/samaasi/paystack-sdk-go/service/payment-requests"
+	"github.com/samaasi/paystack-sdk-go/service/plans"
+	"github.com/samaasi/paystack-sdk-go/service/products"
+	"github.com/samaasi/paystack-sdk-go/service/refunds"
 	"github.com/samaasi/paystack-sdk-go/service/transactions"
 	"github.com/samaasi/paystack-sdk-go/service/transfers"
 )
@@ -45,6 +48,15 @@ type Client struct {
 
 	// Integration service for handling integration operations
 	Integration *integration.Client
+
+	// Plans service for handling plans
+	Plans *plans.Client
+
+	// Products service for handling products
+	Products *products.Client
+
+	// Refunds service for handling refunds
+	Refunds *refunds.Client
 
 	// internal backend client
 	backend *backend.Client
