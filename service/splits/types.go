@@ -25,17 +25,17 @@ type Split struct {
 // Subaccount represents a subaccount in a split
 type Subaccount struct {
 	Subaccount struct {
-		ID                  int         `json:"id"`
-		SubaccountCode      string      `json:"subaccount_code"`
-		BusinessName        string      `json:"business_name"`
-		Description         string      `json:"description"`
-		PrimaryContactName  string      `json:"primary_contact_name"`
-		PrimaryContactEmail string      `json:"primary_contact_email"`
-		PrimaryContactPhone string      `json:"primary_contact_phone"`
+		ID                  int                  `json:"id"`
+		SubaccountCode      string               `json:"subaccount_code"`
+		BusinessName        string               `json:"business_name"`
+		Description         string               `json:"description"`
+		PrimaryContactName  string               `json:"primary_contact_name"`
+		PrimaryContactEmail string               `json:"primary_contact_email"`
+		PrimaryContactPhone string               `json:"primary_contact_phone"`
 		Metadata            paystackapi.Metadata `json:"metadata"`
-		PercentageCharge    float64     `json:"percentage_charge"`
-		SettlementBank      string      `json:"settlement_bank"`
-		AccountNumber       string      `json:"account_number"`
+		PercentageCharge    float64              `json:"percentage_charge"`
+		SettlementBank      string               `json:"settlement_bank"`
+		AccountNumber       string               `json:"account_number"`
 	} `json:"subaccount"`
 	Share int `json:"share"`
 }

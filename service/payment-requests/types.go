@@ -6,27 +6,27 @@ import (
 
 // PaymentRequest represents a payment request
 type PaymentRequest struct {
-	ID               int             `json:"id"`
-	Domain           string          `json:"domain"`
-	Amount           int             `json:"amount"`
-	Currency         string          `json:"currency"`
-	DueDate          string          `json:"due_date"`
-	HasInvoice       bool            `json:"has_invoice"`
-	InvoiceNumber    int             `json:"invoice_number"`
-	Description      string          `json:"description"`
-	PDFURL           string          `json:"pdf_url"`
-	LineItems        []interface{}   `json:"line_items"`
-	Tax              []interface{}   `json:"tax"`
-	RequestCode      string          `json:"request_code"`
-	Status           string          `json:"status"`
-	Paid             bool            `json:"paid"`
-	PaidAt           string          `json:"paid_at"`
+	ID               int                  `json:"id"`
+	Domain           string               `json:"domain"`
+	Amount           int                  `json:"amount"`
+	Currency         string               `json:"currency"`
+	DueDate          string               `json:"due_date"`
+	HasInvoice       bool                 `json:"has_invoice"`
+	InvoiceNumber    int                  `json:"invoice_number"`
+	Description      string               `json:"description"`
+	PDFURL           string               `json:"pdf_url"`
+	LineItems        []interface{}        `json:"line_items"`
+	Tax              []interface{}        `json:"tax"`
+	RequestCode      string               `json:"request_code"`
+	Status           string               `json:"status"`
+	Paid             bool                 `json:"paid"`
+	PaidAt           string               `json:"paid_at"`
 	Metadata         paystackapi.Metadata `json:"metadata"`
-	Notifications    []interface{}   `json:"notifications"`
-	OfflineReference string          `json:"offline_reference"`
-	Customer         int             `json:"customer"`
-	CreatedAt        string          `json:"created_at"`
-	UpdatedAt        string          `json:"updated_at"`
+	Notifications    []interface{}        `json:"notifications"`
+	OfflineReference string               `json:"offline_reference"`
+	Customer         int                  `json:"customer"`
+	CreatedAt        string               `json:"created_at"`
+	UpdatedAt        string               `json:"updated_at"`
 }
 
 // CreatePaymentRequestRequest represents the request to create a payment request

@@ -6,18 +6,18 @@ import (
 
 // CreateCustomerRequest represents the request to create a customer
 type CreateCustomerRequest struct {
-	Email     string                 `json:"email"`
-	FirstName string                 `json:"first_name,omitempty"`
-	LastName  string                 `json:"last_name,omitempty"`
-	Phone     string                 `json:"phone,omitempty"`
+	Email     string               `json:"email"`
+	FirstName string               `json:"first_name,omitempty"`
+	LastName  string               `json:"last_name,omitempty"`
+	Phone     string               `json:"phone,omitempty"`
 	Metadata  paystackapi.Metadata `json:"metadata,omitempty"`
 }
 
 // UpdateCustomerRequest represents the request to update a customer
 type UpdateCustomerRequest struct {
-	FirstName string                 `json:"first_name,omitempty"`
-	LastName  string                 `json:"last_name,omitempty"`
-	Phone     string                 `json:"phone,omitempty"`
+	FirstName string               `json:"first_name,omitempty"`
+	LastName  string               `json:"last_name,omitempty"`
+	Phone     string               `json:"phone,omitempty"`
 	Metadata  paystackapi.Metadata `json:"metadata,omitempty"`
 }
 
@@ -62,20 +62,20 @@ type ValidateCustomerResponse struct {
 
 // CustomerData represents the customer object
 type CustomerData struct {
-	ID              int                    `json:"id"`
-	Integration     int                    `json:"integration,omitempty"`
-	FirstName       string                 `json:"first_name"`
-	LastName        string                 `json:"last_name"`
-	Email           string                 `json:"email"`
-	Phone           string                 `json:"phone"`
+	ID              int                  `json:"id"`
+	Integration     int                  `json:"integration,omitempty"`
+	FirstName       string               `json:"first_name"`
+	LastName        string               `json:"last_name"`
+	Email           string               `json:"email"`
+	Phone           string               `json:"phone"`
 	Metadata        paystackapi.Metadata `json:"metadata"`
-	Domain          string                 `json:"domain"`
-	CustomerCode    string                 `json:"customer_code"`
-	RiskAction      string                 `json:"risk_action"`
-	Identified      bool                   `json:"identified"`
-	Identifications interface{}            `json:"identifications"`
-	CreatedAt       string                 `json:"created_at"`
-	UpdatedAt       string                 `json:"updated_at"`
+	Domain          string               `json:"domain"`
+	CustomerCode    string               `json:"customer_code"`
+	RiskAction      string               `json:"risk_action"`
+	Identified      bool                 `json:"identified"`
+	Identifications interface{}          `json:"identifications"`
+	CreatedAt       string               `json:"created_at"`
+	UpdatedAt       string               `json:"updated_at"`
 }
 
 // ListCustomersParams represents query parameters for listing customers
