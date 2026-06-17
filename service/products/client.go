@@ -8,6 +8,15 @@ import (
 )
 
 // Client is the client for the Products service
+
+// Service represents the interface for products operations.
+type Service interface {
+	Create(ctx context.Context, req *CreateProductRequest) (*ProductResponse, error)
+	List(ctx context.Context) (*ListProductsResponse, error)
+	Fetch(ctx context.Context, id string) (*ProductResponse, error)
+	Update(ctx context.Context, id string, req *UpdateProductRequest) (*ProductResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

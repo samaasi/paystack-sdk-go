@@ -7,6 +7,13 @@ import (
 )
 
 // Client is the client for the Integration service
+
+// Service represents the interface for integration operations.
+type Service interface {
+	FetchPaymentSessionTimeout(ctx context.Context) (*PaymentSessionTimeoutResponse, error)
+	UpdatePaymentSessionTimeout(ctx context.Context, timeout int) (*UpdatePaymentSessionTimeoutResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

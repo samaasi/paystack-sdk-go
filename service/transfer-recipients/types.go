@@ -23,12 +23,12 @@ type Recipient struct {
 }
 
 type CreateRequest struct {
-	Type          string                 `json:"type"`
-	Name          string                 `json:"name"`
-	AccountNumber string                 `json:"account_number"`
-	BankCode      string                 `json:"bank_code"`
-	Currency      string                 `json:"currency,omitempty"`
-	Description   string                 `json:"description,omitempty"`
+	Type          string               `json:"type"`
+	Name          string               `json:"name"`
+	AccountNumber string               `json:"account_number"`
+	BankCode      string               `json:"bank_code"`
+	Currency      string               `json:"currency,omitempty"`
+	Description   string               `json:"description,omitempty"`
 	Metadata      paystackapi.Metadata `json:"metadata,omitempty"`
 }
 

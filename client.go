@@ -31,76 +31,76 @@ import (
 // Client is the main entry point for the Paystack SDK.
 type Client struct {
 	// Transaction service for handling transaction-related operations
-	Transactions *transactions.Client
+	Transactions transactions.Service
 
 	// Transfer service for handling transfer-related operations
-	Transfers *transfers.Client
+	Transfers transfers.Service
 
 	// ApplePay service for handling Apple Pay-related operations
-	ApplePay *applepay.Client
+	ApplePay applepay.Service
 
 	// BulkCharges service for handling bulk charge operations
-	BulkCharges *bulkcharges.Client
+	BulkCharges bulkcharges.Service
 
 	// Charges service for handling charge operations
-	Charges *charges.Client
+	Charges charges.Service
 
 	// PaymentPages service for handling payment page operations
-	PaymentPages *paymentPages.Client
+	PaymentPages paymentPages.Service
 
 	// PaymentRequests service for handling payment request operations
-	PaymentRequests *paymentRequests.Client
+	PaymentRequests paymentRequests.Service
 
 	// Customers service for handling customer operations
-	Customers *customers.Client
+	Customers customers.Service
 
 	// Disputes service for handling dispute operations
-	Disputes *disputes.Client
+	Disputes disputes.Service
 
 	// Integration service for handling integration operations
-	Integration *integration.Client
+	Integration integration.Service
 
 	// Plans service for handling plans
-	Plans *plans.Client
+	Plans plans.Service
 
 	// Products service for handling products
-	Products *products.Client
+	Products products.Service
 
 	// Refunds service for handling refunds
-	Refunds *refunds.Client
+	Refunds refunds.Service
 
 	// Settlements service for handling settlements
-	Settlements *settlements.Client
+	Settlements settlements.Service
 
 	// Splits service for handling splits
-	Splits *splits.Client
+	Splits splits.Service
 
 	// Status service for handling status
-	Status *status.Client
+	Status status.Service
 
 	// Subaccounts service for handling subaccounts
-	Subaccounts *subaccounts.Client
+	Subaccounts subaccounts.Service
 
 	// Subscriptions service for handling subscriptions
-	Subscriptions *subscriptions.Client
+	Subscriptions subscriptions.Service
 
 	// Terminal service for handling terminal
-	Terminal *terminal.Client
+	Terminal terminal.Service
 
 	// Verification service for handling verification
-	Verification *verification.Client
+	Verification verification.Service
 
 	// VirtualAccounts service for handling virtual accounts
-	VirtualAccounts *virtualAccounts.Client
+	VirtualAccounts virtualAccounts.Service
 
 	// TransferControl service for handling transfer control
-	TransferControl *transferControl.Client
+	TransferControl transferControl.Service
 
 	// TransferRecipients service for handling transfer recipients
-	TransferRecipients *transferRecipients.Client
+	TransferRecipients transferRecipients.Service
 
 	// Misc service for handling miscellaneous operations
-	Misc *misc.Client
+	Misc misc.Service
 
 	// internal backend client
 	backend *backend.Client

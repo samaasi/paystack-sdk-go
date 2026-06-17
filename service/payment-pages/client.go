@@ -8,6 +8,17 @@ import (
 )
 
 // Client is the client for the Payment Pages service
+
+// Service represents the interface for payment-pages operations.
+type Service interface {
+	Create(ctx context.Context, req *CreatePageRequest) (*PageResponse, error)
+	List(ctx context.Context) (*ListPagesResponse, error)
+	Fetch(ctx context.Context, idOrSlug string) (*PageResponse, error)
+	Update(ctx context.Context, idOrSlug string, req *UpdatePageRequest) (*PageResponse, error)
+	CheckSlugAvailability(ctx context.Context, slug string) (*CheckSlugResponse, error)
+	AddProducts(ctx context.Context, id int, req *AddProductsRequest) (*AddProductsResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

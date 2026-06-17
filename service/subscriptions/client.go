@@ -8,6 +8,15 @@ import (
 	"github.com/samaasi/paystack-sdk-go/paystackapi"
 )
 
+// Service represents the interface for subscriptions operations.
+type Service interface {
+	Create(ctx context.Context, req *CreateSubscriptionRequest) (*SubscriptionResponse, error)
+	List(ctx context.Context, perPage, page int) (*ListSubscriptionsResponse, error)
+	Fetch(ctx context.Context, idOrCode string) (*SubscriptionResponse, error)
+	Enable(ctx context.Context, req *EnableDisableSubscriptionRequest) (*paystackapi.Response[interface{}], error)
+	Disable(ctx context.Context, req *EnableDisableSubscriptionRequest) (*paystackapi.Response[interface{}], error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

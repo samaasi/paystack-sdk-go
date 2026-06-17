@@ -79,7 +79,9 @@ func TestList(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
-	params := &ListTransactionParams{PerPage: 10, Page: 1}
+	page := 1
+	perPage := 10
+	params := &ListTransactionParams{PerPage: &perPage, Page: &page}
 	resp, err := client.List(context.Background(), params)
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)

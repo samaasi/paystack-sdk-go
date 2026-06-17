@@ -6,19 +6,19 @@ import (
 
 // InitializeRequest represents the payload for initializing a transaction
 type InitializeRequest struct {
-	Amount            string               `json:"amount"`
-	Email             string               `json:"email"`
-	Currency          string               `json:"currency,omitempty"`
-	Reference         string               `json:"reference,omitempty"`
-	CallbackURL       string               `json:"callback_url,omitempty"`
-	Plan              string               `json:"plan,omitempty"`
-	InvoiceLimit      int                  `json:"invoice_limit,omitempty"`
-	Metadata          paystackapi.Metadata `json:"metadata,omitempty"`
-	Channels          []string             `json:"channels,omitempty"`
-	SplitCode         string               `json:"split_code,omitempty"`
-	Subaccount        string               `json:"subaccount,omitempty"`
-	TransactionCharge int                  `json:"transaction_charge,omitempty"`
-	Bearer            string               `json:"bearer,omitempty"`
+	Amount            string                `json:"amount"`
+	Email             string                `json:"email"`
+	Currency          paystackapi.Currency  `json:"currency,omitempty"`
+	Reference         string                `json:"reference,omitempty"`
+	CallbackURL       string                `json:"callback_url,omitempty"`
+	Plan              string                `json:"plan,omitempty"`
+	InvoiceLimit      int                   `json:"invoice_limit,omitempty"`
+	Metadata          paystackapi.Metadata  `json:"metadata,omitempty"`
+	Channels          []paystackapi.Channel `json:"channels,omitempty"`
+	SplitCode         string                `json:"split_code,omitempty"`
+	Subaccount        string                `json:"subaccount,omitempty"`
+	TransactionCharge int                   `json:"transaction_charge,omitempty"`
+	Bearer            paystackapi.Bearer    `json:"bearer,omitempty"`
 }
 
 // InitializeResponse represents the response for transaction initialization
@@ -40,15 +40,15 @@ type VerifyResponse struct {
 type VerifyData struct {
 	ID              int                  `json:"id"`
 	Domain          string               `json:"domain"`
-	Status          string               `json:"status"`
+	Status          paystackapi.Status   `json:"status"`
 	Reference       string               `json:"reference"`
 	Amount          int                  `json:"amount"`
 	Message         string               `json:"message"`
 	GatewayResponse string               `json:"gateway_response"`
 	PaidAt          string               `json:"paid_at"`
 	CreatedAt       string               `json:"created_at"`
-	Channel         string               `json:"channel"`
-	Currency        string               `json:"currency"`
+	Channel         paystackapi.Channel  `json:"channel"`
+	Currency        paystackapi.Currency `json:"currency"`
 	IPAddress       string               `json:"ip_address"`
 	Metadata        paystackapi.Metadata `json:"metadata"`
 	Log             *Log                 `json:"log,omitempty"`
@@ -80,35 +80,38 @@ type History struct {
 }
 
 type Authorization struct {
-	AuthorizationCode string `json:"authorization_code"`
-	Bin               string `json:"bin"`
-	Last4             string `json:"last4"`
-	ExpMonth          string `json:"exp_month"`
-	ExpYear           string `json:"exp_year"`
-	Channel           string `json:"channel"`
-	CardType          string `json:"card_type"`
-	Bank              string `json:"bank"`
-	CountryCode       string `json:"country_code"`
-	Brand             string `json:"brand"`
-	Reusable          bool   `json:"reusable"`
-	Signature         string `json:"signature"`
-	AccountName       string `json:"account_name"`
+	AuthorizationCode string              `json:"authorization_code"`
+	Bin               string              `json:"bin"`
+	Last4             string              `json:"last4"`
+	ExpMonth          string              `json:"exp_month"`
+	ExpYear           string              `json:"exp_year"`
+	Channel           paystackapi.Channel `json:"channel"`
+	CardType          string              `json:"card_type"`
+	Bank              string              `json:"bank"`
+	CountryCode       string              `json:"country_code"`
+	Brand             string              `json:"brand"`
+	Reusable          bool                `json:"reusable"`
+	Signature         string              `json:"signature"`
+	AccountName       string              `json:"account_name"`
 }
 
 type Customer struct {
-	ID           int    `json:"id"`
-	FirstName    string `json:"first_name"`
-	LastName     string `json:"last_name"`
-	Email        string `json:"email"`
-	CustomerCode string `json:"customer_code"`
-	Phone        string `json:"phone"`
-	RiskAction   string `json:"risk_action"`
+	ID           int                    `json:"id"`
+	FirstName    string                 `json:"first_name"`
+	LastName     string                 `json:"last_name"`
+	Email        string                 `json:"email"`
+	CustomerCode string                 `json:"customer_code"`
+	Phone        string                 `json:"phone"`
+	RiskAction   paystackapi.RiskAction `json:"risk_action"`
 }
 
 // ListTransactionParams represents query parameters for listing transactions
 type ListTransactionParams struct {
-	PerPage int `query:"perPage"`
-	Page    int `query:"page"`
+	PerPage *int    `query:"perPage,omitempty"`
+	Page    *int    `query:"page,omitempty"`
+	Status  *string `query:"status,omitempty"`
+	From    *string `query:"from,omitempty"`
+	To      *string `query:"to,omitempty"`
 }
 
 // ListTransactionResponse represents the response for listing transactions

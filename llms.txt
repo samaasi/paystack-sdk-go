@@ -1,0 +1,121 @@
+# paystack-sdk-go
+
+> A comprehensive, zero-dependency, production-grade Go SDK for the Paystack API. Covers all 24 Paystack services with auto-idempotency, generic pagination iterators, strongly typed enums, and fully mockable service interfaces.
+
+## Key Facts
+
+- Module: `github.com/samaasi/paystack-sdk-go`
+- Go version: 1.18+ (uses generics)
+- Zero external dependencies
+- All methods accept `context.Context`
+
+## Installation
+
+```bash
+go get github.com/samaasi/paystack-sdk-go
+```
+
+## Initialization
+
+```go
+import paystack "github.com/samaasi/paystack-sdk-go"
+
+client := paystack.NewClient(os.Getenv("PAYSTACK_SECRET_KEY"))
+// Options: WithTimeout, WithMaxRetries, WithBaseURL, WithHTTPClient
+```
+
+## Core Concepts
+
+### Typed Enums (paystackapi package)
+Avoid magic strings. Use provided constants:
+- `paystackapi.CurrencyNGN`, `CurrencyGHS`, `CurrencyUSD`, `CurrencyZAR`, `CurrencyKES`
+- `paystackapi.ChannelCard`, `ChannelBank`, `ChannelUSSD`, `ChannelMobileMoney`, `ChannelBankTransfer`
+- `paystackapi.StatusSuccess`, `StatusFailed`, `StatusPending`, `StatusAbandoned`
+- `paystackapi.BearerAccount`, `BearerSubaccount`
+
+### Metadata
+All requests that support metadata use `paystackapi.Metadata` (a `map[string]interface{}`).
+
+### Error Handling
+Errors return `*paystackapi.APIError`. Use `errors.As` to inspect:
+```go
+var apiErr *paystackapi.APIError
+if errors.As(err, &apiErr) {
+    fmt.Println(apiErr.StatusCode, apiErr.Message)
+}
+```
+
+### Idempotency
+The SDK auto-generates a UUIDv4 `Idempotency-Key` for every POST/PUT request.
+To supply your own key:
+```go
+ctx = paystackapi.WithIdempotencyKey(ctx, "your-unique-key")
+```
+
+### Pagination Iterator
+```go
+iter := paystackapi.NewIterator(func(ctx context.Context, page, perPage int) (paystackapi.Response[[]transactions.VerifyData], error) {
+    resp, err := client.Transactions.List(ctx, &transactions.ListTransactionParams{
+        Page:    &page,
+        PerPage: &perPage,
+    })
+    if err != nil {
+        return paystackapi.Response[[]transactions.VerifyData]{}, err
+    }
+    return resp.Response, nil
+})
+
+for iter.Next(ctx) {
+    tx := iter.Value()
+}
+if err := iter.Err(); err != nil { ... }
+```
+
+### Webhook Verification
+```go
+// HMAC signature check + IP allowlist
+if !webhook.IsFromPaystackIP(r) { /* reject */ }
+event, err := webhook.Verify(r, secretKey)
+```
+
+### Mocking in Tests
+Every service is exposed as an interface. Use gomock or write a hand-rolled stub:
+```go
+type MockTransactions struct{ ... }
+func (m *MockTransactions) Initialize(...) { ... }
+
+client.Transactions = &MockTransactions{}
+```
+
+## Services
+
+| Field | Package | Description |
+|---|---|---|
+| `client.Transactions` | `service/transactions` | Initialize, Verify, List, Charge, Timeline |
+| `client.Customers` | `service/customers` | Create, Fetch, Update, Whitelist/Blacklist |
+| `client.Transfers` | `service/transfers` | Initiate, Finalize, Bulk transfers |
+| `client.TransferRecipients` | `service/transfer-recipients` | Create, List, Update, Delete |
+| `client.TransferControl` | `service/transfer-control` | Balance, Balance Ledger, Resend OTP |
+| `client.Plans` | `service/plans` | Create, Fetch, List, Update |
+| `client.Subscriptions` | `service/subscriptions` | Create, Fetch, List, Toggle |
+| `client.PaymentPages` | `service/payment-pages` | Create, Fetch, List, Update |
+| `client.PaymentRequests` | `service/payment-requests` | Create, Fetch, List, Verify |
+| `client.Charges` | `service/charges` | Create, Submit PIN/OTP/Phone/Birthday |
+| `client.BulkCharges` | `service/bulk-charges` | Initiate, List, Fetch batches |
+| `client.Refunds` | `service/refunds` | Create, List, Fetch |
+| `client.Disputes` | `service/disputes` | List, Fetch, Resolve, Export |
+| `client.Products` | `service/products` | Create, Fetch, List, Update |
+| `client.Splits` | `service/splits` | Create, Fetch, List, Update |
+| `client.Subaccounts` | `service/subaccounts` | Create, Fetch, List, Update |
+| `client.Settlements` | `service/settlements` | List, Fetch transactions |
+| `client.Verification` | `service/verification` | Resolve Account, Card BIN |
+| `client.Terminal` | `service/terminal` | Send event, Fetch, Commission |
+| `client.ApplePay` | `service/apple-pay` | Register, List, Unregister domains |
+| `client.VirtualAccounts` | `service/virtual-accounts` | Create, Assign, List, Deactivate |
+| `client.Integration` | `service/integration` | Timeout settings |
+| `client.Misc` | `service/misc` | Banks, Countries, States |
+| `client.Status` | `service/status` | API health check |
+
+## Full Documentation
+
+https://pkg.go.dev/github.com/samaasi/paystack-sdk-go

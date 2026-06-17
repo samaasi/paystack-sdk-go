@@ -8,6 +8,13 @@ import (
 )
 
 // Client is the client for the Settlements service
+
+// Service represents the interface for settlements operations.
+type Service interface {
+	List(ctx context.Context) (*ListSettlementsResponse, error)
+	FetchTransactions(ctx context.Context, id string) (*ListSettlementTransactionsResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

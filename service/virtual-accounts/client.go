@@ -7,6 +7,16 @@ import (
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 )
 
+// Service represents the interface for virtual-accounts operations.
+type Service interface {
+	Create(ctx context.Context, req *CreateVirtualAccountRequest) (*VirtualAccountResponse, error)
+	List(ctx context.Context, req *ListVirtualAccountsRequest) (*ListVirtualAccountsResponse, error)
+	Fetch(ctx context.Context, id int) (*VirtualAccountResponse, error)
+	Deactivate(ctx context.Context, id int) (*VirtualAccountResponse, error)
+	SplitTransaction(ctx context.Context, req *SplitTransactionRequest) (*VirtualAccountResponse, error)
+	RemoveSplit(ctx context.Context, req *RemoveSplitRequest) (*VirtualAccountResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

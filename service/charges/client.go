@@ -7,6 +7,17 @@ import (
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 )
 
+// Service represents the interface for charges operations.
+type Service interface {
+	Create(ctx context.Context, req *CreateChargeRequest) (*CreateChargeResponse, error)
+	SubmitPIN(ctx context.Context, req *SubmitPINRequest) (*SubmitResponse, error)
+	SubmitOTP(ctx context.Context, req *SubmitOTPRequest) (*SubmitResponse, error)
+	SubmitPhone(ctx context.Context, req *SubmitPhoneRequest) (*SubmitResponse, error)
+	SubmitBirthday(ctx context.Context, req *SubmitBirthdayRequest) (*SubmitResponse, error)
+	SubmitAddress(ctx context.Context, req *SubmitAddressRequest) (*SubmitResponse, error)
+	CheckPending(ctx context.Context, reference string) (*CheckPendingChargeResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

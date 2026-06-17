@@ -7,6 +7,13 @@ import (
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 )
 
+// Service represents the interface for transactions operations.
+type Service interface {
+	Initialize(ctx context.Context, req *InitializeRequest) (*InitializeResponse, error)
+	Verify(ctx context.Context, reference string) (*VerifyResponse, error)
+	List(ctx context.Context, params *ListTransactionParams) (*ListTransactionResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

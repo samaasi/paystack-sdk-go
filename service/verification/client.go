@@ -7,6 +7,13 @@ import (
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 )
 
+// Service represents the interface for verification operations.
+type Service interface {
+	ResolveAccount(ctx context.Context, accountNumber, bankCode string) (*ResolveAccountResponse, error)
+	ValidateAccount(ctx context.Context, req *ValidateAccountRequest) (*ValidateAccountResponse, error)
+	ResolveCardBIN(ctx context.Context, bin string) (*ResolveCardBINResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

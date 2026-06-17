@@ -8,6 +8,15 @@ import (
 )
 
 // Client is the client for the Plans service
+
+// Service represents the interface for plans operations.
+type Service interface {
+	Create(ctx context.Context, req *CreatePlanRequest) (*PlanResponse, error)
+	List(ctx context.Context) (*ListPlansResponse, error)
+	Fetch(ctx context.Context, idOrCode string) (*PlanResponse, error)
+	Update(ctx context.Context, idOrCode string, req *UpdatePlanRequest) (*PlanResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

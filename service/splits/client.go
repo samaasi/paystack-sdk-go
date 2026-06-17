@@ -8,6 +8,17 @@ import (
 )
 
 // Client is the client for the Splits service
+
+// Service represents the interface for splits operations.
+type Service interface {
+	Create(ctx context.Context, req *CreateSplitRequest) (*SplitResponse, error)
+	List(ctx context.Context) (*ListSplitsResponse, error)
+	Fetch(ctx context.Context, id string) (*SplitResponse, error)
+	Update(ctx context.Context, id string, req *UpdateSplitRequest) (*SplitResponse, error)
+	AddSubaccount(ctx context.Context, id string, req *SubaccountRequest) (*SplitResponse, error)
+	RemoveSubaccount(ctx context.Context, id string, req *SubaccountRequest) (*SplitResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

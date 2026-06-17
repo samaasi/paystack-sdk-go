@@ -8,6 +8,19 @@ import (
 )
 
 // Client is the client for the Customers service
+
+// Service represents the interface for customers operations.
+type Service interface {
+	Create(ctx context.Context, req *CreateCustomerRequest) (*CustomerResponse, error)
+	List(ctx context.Context, params *ListCustomersParams) (*CustomerListResponse, error)
+	Fetch(ctx context.Context, emailOrCode string) (*CustomerResponse, error)
+	Update(ctx context.Context, code string, req *UpdateCustomerRequest) (*CustomerResponse, error)
+	Validate(ctx context.Context, code string, req *ValidateCustomerRequest) (*ValidateCustomerResponse, error)
+	Whitelist(ctx context.Context, customerCode string) (*CustomerResponse, error)
+	Blacklist(ctx context.Context, customerCode string) (*CustomerResponse, error)
+	DeactivateAuthorization(ctx context.Context, authorizationCode string) (*CustomerResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

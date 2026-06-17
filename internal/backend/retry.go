@@ -74,9 +74,8 @@ func isRetryable(err error) bool {
 
 func (b *Backoff) calculateDelay(attempt int) time.Duration {
 	delay := float64(b.MinDelay) * math.Pow(2, float64(attempt))
-	// Add jitter
-	jitter := rand.Float64() * float64(delay) * 0.1
-	delay += jitter
+	// math/rand is auto-seeded in Go 1.20+
+	delay += rand.Float64() * float64(delay) * 0.1
 
 	if delay > float64(b.MaxDelay) {
 		delay = float64(b.MaxDelay)
