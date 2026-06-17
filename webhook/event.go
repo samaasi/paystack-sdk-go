@@ -1,6 +1,10 @@
 package webhook
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/samaasi/paystack-sdk-go/paystackapi"
+)
 
 // EventType constants representing the various Paystack webhook events
 const (
@@ -65,35 +69,35 @@ func (e *Event) UnmarshalData(v interface{}) error {
 
 // ChargeSuccessEvent represents the data for a charge.success event
 type ChargeSuccessEvent struct {
-	ID              int             `json:"id"`
-	Domain          string          `json:"domain"`
-	Status          string          `json:"status"`
-	Reference       string          `json:"reference"`
-	Amount          int             `json:"amount"`
-	Message         string          `json:"message"`
-	GatewayResponse string          `json:"gateway_response"`
-	PaidAt          string          `json:"paid_at"`
-	CreatedAt       string          `json:"created_at"`
-	Channel         string          `json:"channel"`
-	Currency        string          `json:"currency"`
-	IPAddress       string          `json:"ip_address"`
-	Metadata        json.RawMessage `json:"metadata,omitempty"`
-	Log             interface{}     `json:"log,omitempty"`
-	Fees            int             `json:"fees,omitempty"`
-	Customer        Customer        `json:"customer"`
-	Authorization   Authorization   `json:"authorization"`
-	Plan            interface{}     `json:"plan,omitempty"`
+	ID              int                  `json:"id"`
+	Domain          string               `json:"domain"`
+	Status          string               `json:"status"`
+	Reference       string               `json:"reference"`
+	Amount          int                  `json:"amount"`
+	Message         string               `json:"message"`
+	GatewayResponse string               `json:"gateway_response"`
+	PaidAt          string               `json:"paid_at"`
+	CreatedAt       string               `json:"created_at"`
+	Channel         string               `json:"channel"`
+	Currency        string               `json:"currency"`
+	IPAddress       string               `json:"ip_address"`
+	Metadata        paystackapi.Metadata `json:"metadata,omitempty"`
+	Log             interface{}          `json:"log,omitempty"`
+	Fees            int                  `json:"fees,omitempty"`
+	Customer        Customer             `json:"customer"`
+	Authorization   Authorization        `json:"authorization"`
+	Plan            interface{}          `json:"plan,omitempty"`
 }
 
 type Customer struct {
-	ID           int         `json:"id"`
-	FirstName    string      `json:"first_name"`
-	LastName     string      `json:"last_name"`
-	Email        string      `json:"email"`
-	CustomerCode string      `json:"customer_code"`
-	Phone        string      `json:"phone"`
-	Metadata     interface{} `json:"metadata"`
-	RiskAction   string      `json:"risk_action"`
+	ID           int                  `json:"id"`
+	FirstName    string               `json:"first_name"`
+	LastName     string               `json:"last_name"`
+	Email        string               `json:"email"`
+	CustomerCode string               `json:"customer_code"`
+	Phone        string               `json:"phone"`
+	Metadata     paystackapi.Metadata `json:"metadata"`
+	RiskAction   string               `json:"risk_action"`
 }
 
 type Authorization struct {
@@ -140,21 +144,21 @@ type Integration struct {
 }
 
 type Recipient struct {
-	Active        bool        `json:"active"`
-	Currency      string      `json:"currency"`
-	Description   string      `json:"description"`
-	Domain        string      `json:"domain"`
-	Email         interface{} `json:"email"`
-	ID            int         `json:"id"`
-	Integration   int         `json:"integration"`
-	Metadata      interface{} `json:"metadata"`
-	Name          string      `json:"name"`
-	RecipientCode string      `json:"recipient_code"`
-	Type          string      `json:"type"`
-	IsDeleted     bool        `json:"is_deleted"`
-	Details       BankDetails `json:"details"`
-	CreatedAt     string      `json:"created_at"`
-	UpdatedAt     string      `json:"updated_at"`
+	Active        bool                 `json:"active"`
+	Currency      string               `json:"currency"`
+	Description   string               `json:"description"`
+	Domain        string               `json:"domain"`
+	Email         interface{}          `json:"email"`
+	ID            int                  `json:"id"`
+	Integration   int                  `json:"integration"`
+	Metadata      paystackapi.Metadata `json:"metadata"`
+	Name          string               `json:"name"`
+	RecipientCode string               `json:"recipient_code"`
+	Type          string               `json:"type"`
+	IsDeleted     bool                 `json:"is_deleted"`
+	Details       BankDetails          `json:"details"`
+	CreatedAt     string               `json:"created_at"`
+	UpdatedAt     string               `json:"updated_at"`
 }
 
 type BankDetails struct {
@@ -224,26 +228,26 @@ type SubscriptionEvent struct {
 
 // PaymentRequestEvent represents the data for paymentrequest.* events
 type PaymentRequestEvent struct {
-	ID               int         `json:"id"`
-	Domain           string      `json:"domain"`
-	Amount           int         `json:"amount"`
-	Currency         string      `json:"currency"`
-	DueDate          string      `json:"due_date"`
-	HasInvoice       bool        `json:"has_invoice"`
-	InvoiceNumber    string      `json:"invoice_number"`
-	Description      string      `json:"description"`
-	PDFUrl           string      `json:"pdf_url"`
-	LineItems        interface{} `json:"line_items"`
-	Tax              interface{} `json:"tax"`
-	RequestCode      string      `json:"request_code"`
-	Status           string      `json:"status"`
-	Paid             bool        `json:"paid"`
-	PaidAt           string      `json:"paid_at"`
-	Metadata         interface{} `json:"metadata"`
-	Notifications    interface{} `json:"notifications"`
-	OfflineReference string      `json:"offline_reference"`
-	Customer         Customer    `json:"customer"`
-	CreatedAt        string      `json:"created_at"`
+	ID               int                  `json:"id"`
+	Domain           string               `json:"domain"`
+	Amount           int                  `json:"amount"`
+	Currency         string               `json:"currency"`
+	DueDate          string               `json:"due_date"`
+	HasInvoice       bool                 `json:"has_invoice"`
+	InvoiceNumber    string               `json:"invoice_number"`
+	Description      string               `json:"description"`
+	PDFUrl           string               `json:"pdf_url"`
+	LineItems        interface{}          `json:"line_items"`
+	Tax              interface{}          `json:"tax"`
+	RequestCode      string               `json:"request_code"`
+	Status           string               `json:"status"`
+	Paid             bool                 `json:"paid"`
+	PaidAt           string               `json:"paid_at"`
+	Metadata         paystackapi.Metadata `json:"metadata"`
+	Notifications    interface{}          `json:"notifications"`
+	OfflineReference string               `json:"offline_reference"`
+	Customer         Customer             `json:"customer"`
+	CreatedAt        string               `json:"created_at"`
 }
 
 // RefundEvent represents the data for refund.* events

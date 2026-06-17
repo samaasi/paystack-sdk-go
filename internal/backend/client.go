@@ -2,6 +2,7 @@ package backend
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"time"
 
@@ -62,6 +63,14 @@ func WithTimeout(timeout time.Duration) ClientOption {
 func (c *Client) Call(ctx context.Context, method, path string, body, v interface{}) error {
 	url := c.baseURL + path
 
+	var bodyBytes []byte
+	if body != nil {
+		var err error
+		if bodyBytes, err = json.Marshal(body); err != nil {
+			return err
+		}
+	}
+
 	op := func() error {
 		// Extract headers from context
 		headers := paystackapi.GetCustomHeaders(ctx)
@@ -77,7 +86,7 @@ func (c *Client) Call(ctx context.Context, method, path string, body, v interfac
 			Headers: headers,
 		}
 
-		req, err := NewRequest(method, url, c.apiKey, body, reqOpts)
+		req, err := NewRequest(method, url, c.apiKey, bodyBytes, reqOpts)
 		if err != nil {
 			return err
 		}

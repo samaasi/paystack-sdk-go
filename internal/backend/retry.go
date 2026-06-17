@@ -2,9 +2,13 @@ package backend
 
 import (
 	"context"
+	"errors"
 	"math"
 	"math/rand"
+	"net/http"
 	"time"
+
+	"github.com/samaasi/paystack-sdk-go/paystackapi"
 )
 
 // Backoff handles retry logic with exponential backoff
@@ -32,11 +36,20 @@ func (b *Backoff) Retry(ctx context.Context, op func() error) error {
 			return nil
 		}
 
+		if !isRetryable(err) {
+			return err
+		}
+
 		if i == b.MaxRetries {
 			break
 		}
 
 		delay := b.calculateDelay(i)
+		var apiErr *paystackapi.APIError
+		if errors.As(err, &apiErr) && apiErr.StatusCode == http.StatusTooManyRequests && apiErr.RetryAfter > 0 {
+			delay = time.Duration(apiErr.RetryAfter) * time.Second
+		}
+
 		select {
 		case <-time.After(delay):
 			continue
@@ -45,6 +58,18 @@ func (b *Backoff) Retry(ctx context.Context, op func() error) error {
 		}
 	}
 	return err
+}
+
+func isRetryable(err error) bool {
+	var apiErr *paystackapi.APIError
+	if errors.As(err, &apiErr) {
+		if apiErr.StatusCode >= 400 && apiErr.StatusCode < 500 && apiErr.StatusCode != http.StatusTooManyRequests {
+			return false
+		}
+		return true
+	}
+
+	return true
 }
 
 func (b *Backoff) calculateDelay(attempt int) time.Duration {

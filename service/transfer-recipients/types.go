@@ -29,7 +29,7 @@ type CreateRequest struct {
 	BankCode      string                 `json:"bank_code"`
 	Currency      string                 `json:"currency,omitempty"`
 	Description   string                 `json:"description,omitempty"`
-	Metadata      map[string]interface{} `json:"metadata,omitempty"`
+	Metadata      paystackapi.Metadata `json:"metadata,omitempty"`
 }
 
 type CreateResponse struct {

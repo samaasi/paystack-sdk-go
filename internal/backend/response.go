@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/samaasi/paystack-sdk-go/paystackapi"
 )
@@ -25,6 +26,11 @@ func Decode(resp *http.Response, v interface{}) error {
 			}
 		}
 		apiErr.StatusCode = resp.StatusCode
+		if retryAfter := resp.Header.Get("Retry-After"); retryAfter != "" {
+			if parsed, err := strconv.Atoi(retryAfter); err == nil {
+				apiErr.RetryAfter = parsed
+			}
+		}
 		return &apiErr
 	}
 
