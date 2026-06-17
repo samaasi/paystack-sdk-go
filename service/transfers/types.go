@@ -4,12 +4,13 @@ import "github.com/samaasi/paystack-sdk-go/paystackapi"
 
 // InitiateRequest represents the payload for initiating a transfer
 type InitiateRequest struct {
-	Source    string `json:"source"`
-	Amount    int    `json:"amount"`
-	Recipient string `json:"recipient"`
-	Reason    string `json:"reason,omitempty"`
-	Currency  string `json:"currency,omitempty"`
-	Reference string `json:"reference,omitempty"`
+	Source    string               `json:"source"`
+	Amount    int                  `json:"amount"`
+	Recipient string               `json:"recipient"`
+	Reason    string               `json:"reason,omitempty"`
+	Currency  string               `json:"currency,omitempty"`
+	Reference string               `json:"reference,omitempty"`
+	Metadata  paystackapi.Metadata `json:"metadata,omitempty"`
 }
 
 // InitiateResponse represents the response for transfer initialization
@@ -61,18 +62,18 @@ type FinalizeData struct {
 }
 
 type Recipient struct {
-	Domain        string           `json:"domain"`
-	Type          string           `json:"type"`
-	Currency      string           `json:"currency"`
-	Name          string           `json:"name"`
-	Details       RecipientDetails `json:"details"`
-	Description   string           `json:"description"`
-	Metadata      interface{}      `json:"metadata"`
-	RecipientCode string           `json:"recipient_code"`
-	Active        bool             `json:"active"`
-	ID            int              `json:"id"`
-	CreatedAt     string           `json:"created_at"`
-	UpdatedAt     string           `json:"updated_at"`
+	Domain        string               `json:"domain"`
+	Type          string               `json:"type"`
+	Currency      string               `json:"currency"`
+	Name          string               `json:"name"`
+	Details       RecipientDetails     `json:"details"`
+	Description   string               `json:"description"`
+	Metadata      paystackapi.Metadata `json:"metadata"`
+	RecipientCode string               `json:"recipient_code"`
+	Active        bool                 `json:"active"`
+	ID            int                  `json:"id"`
+	CreatedAt     string               `json:"created_at"`
+	UpdatedAt     string               `json:"updated_at"`
 }
 
 type RecipientDetails struct {
