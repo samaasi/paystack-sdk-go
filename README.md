@@ -126,16 +126,18 @@ import (
 
 func main() {
 	client := paystack.NewClient("sk_test_...")
+
+	// ctx is stored by the iterator — cancellation propagates into all page fetches automatically.
 	ctx := context.Background()
 
 	iter := paystackapi.NewIterator(ctx, func(ctx context.Context, page, perPage int) (paystackapi.Response[[]transactions.VerifyData], error) {
 		return client.Transactions.List(ctx, &transactions.ListTransactionParams{
-			PerPage: perPage,
+			PerPage: perPage, // always forward perPage — the iterator controls batch size
 			Page:    page,
 		})
 	})
 
-	// Loop over ALL transactions sequentially
+	// No need to pass ctx here; the iterator uses the context provided at creation.
 	for iter.Next() {
 		tx := iter.Value()
 		fmt.Printf("Transaction ID: %d, Status: %s\n", tx.ID, tx.Status)
