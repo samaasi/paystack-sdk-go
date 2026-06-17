@@ -1,12 +1,15 @@
 package transactions
 
-import "github.com/samaasi/paystack-sdk-go/paystackapi"
+import (
+	"github.com/samaasi/paystack-sdk-go/paystackapi"
+)
 
 // InitializeRequest represents the payload for initializing a transaction
 type InitializeRequest struct {
-	Amount   string `json:"amount"`
-	Email    string `json:"email"`
-	Currency string `json:"currency,omitempty"`
+	Amount   string             `json:"amount"`
+	Email    string             `json:"email"`
+	Currency string             `json:"currency,omitempty"`
+	Metadata paystackapi.Metadata `json:"metadata,omitempty"`
 }
 
 // InitializeResponse represents the response for transaction initialization
@@ -26,18 +29,19 @@ type VerifyResponse struct {
 }
 
 type VerifyData struct {
-	ID              int    `json:"id"`
-	Domain          string `json:"domain"`
-	Status          string `json:"status"`
-	Reference       string `json:"reference"`
-	Amount          int    `json:"amount"`
-	Message         string `json:"message"`
-	GatewayResponse string `json:"gateway_response"`
-	PaidAt          string `json:"paid_at"`
-	CreatedAt       string `json:"created_at"`
-	Channel         string `json:"channel"`
-	Currency        string `json:"currency"`
-	IPAddress       string `json:"ip_address"`
+	ID              int                  `json:"id"`
+	Domain          string               `json:"domain"`
+	Status          string               `json:"status"`
+	Reference       string               `json:"reference"`
+	Amount          int                  `json:"amount"`
+	Message         string               `json:"message"`
+	GatewayResponse string               `json:"gateway_response"`
+	PaidAt          string               `json:"paid_at"`
+	CreatedAt       string               `json:"created_at"`
+	Channel         string               `json:"channel"`
+	Currency        string               `json:"currency"`
+	IPAddress       string               `json:"ip_address"`
+	Metadata        paystackapi.Metadata `json:"metadata"`
 }
 
 // ListTransactionParams represents query parameters for listing transactions
