@@ -8,6 +8,20 @@ import (
 )
 
 // Client is the client for the Payment Requests service
+
+// Service represents the interface for payment-requests operations.
+type Service interface {
+	Create(ctx context.Context, req *CreatePaymentRequestRequest) (*PaymentRequestResponse, error)
+	List(ctx context.Context) (*ListPaymentRequestsResponse, error)
+	Fetch(ctx context.Context, idOrCode string) (*PaymentRequestResponse, error)
+	Verify(ctx context.Context, code string) (*PaymentRequestResponse, error)
+	SendNotification(ctx context.Context, code string) (*PaymentRequestResponse, error)
+	Total(ctx context.Context) (*PaymentRequestTotalResponse, error)
+	Finalize(ctx context.Context, code string) (*PaymentRequestResponse, error)
+	Update(ctx context.Context, idOrCode string, req *UpdatePaymentRequestRequest) (*PaymentRequestResponse, error)
+	Archive(ctx context.Context, code string) (*PaymentRequestResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

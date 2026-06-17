@@ -13,6 +13,13 @@ import (
 const DefaultStatusURL = "https://status.paystack.com/api/v2/summary.json"
 
 // Client is the client for the Status service
+
+// Service represents the interface for status operations.
+type Service interface {
+	WithURL(url string) *Client
+	Fetch(ctx context.Context) (*Summary, error)
+}
+
 type Client struct {
 	httpClient *http.Client
 	url        string

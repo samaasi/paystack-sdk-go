@@ -8,6 +8,19 @@ import (
 )
 
 // Client is the client for the Disputes service
+
+// Service represents the interface for disputes operations.
+type Service interface {
+	List(ctx context.Context, params *ListDisputesParams) (*DisputeListResponse, error)
+	Fetch(ctx context.Context, id string) (*DisputeResponse, error)
+	ListTransactionDisputes(ctx context.Context, transactionID string) (*DisputeListResponse, error)
+	Update(ctx context.Context, id string, req *UpdateDisputeRequest) (*DisputeResponse, error)
+	AddEvidence(ctx context.Context, id string, req *AddEvidenceRequest) (*DisputeResponse, error)
+	GetUploadURL(ctx context.Context, id string, fileName string) (*UploadURLResponse, error)
+	Resolve(ctx context.Context, id string, req *ResolveDisputeRequest) (*DisputeResponse, error)
+	Export(ctx context.Context, params *ListDisputesParams) (*ExportDisputesResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

@@ -8,6 +8,16 @@ import (
 	"github.com/samaasi/paystack-sdk-go/paystackapi"
 )
 
+// Service represents the interface for transfer-recipients operations.
+type Service interface {
+	Create(ctx context.Context, req *CreateRequest) (*CreateResponse, error)
+	List(ctx context.Context, perPage, page int) (*ListResponse, error)
+	Fetch(ctx context.Context, idOrCode string) (*FetchResponse, error)
+	Update(ctx context.Context, idOrCode string, req *UpdateRequest) (*UpdateResponse, error)
+	Delete(ctx context.Context, idOrCode string) (*paystackapi.Response[string], error)
+	BulkCreate(ctx context.Context, req *BatchCreateRequest) (*BatchCreateResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

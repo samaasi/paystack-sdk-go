@@ -7,6 +7,16 @@ import (
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 )
 
+// Service represents the interface for bulk-charges operations.
+type Service interface {
+	Initiate(ctx context.Context, req InitiateBulkChargeRequest) (*InitiateBulkChargeResponse, error)
+	List(ctx context.Context, params *ListBulkChargesParams) (*ListBulkChargesResponse, error)
+	Fetch(ctx context.Context, idOrCode string) (*FetchBulkChargeResponse, error)
+	FetchCharges(ctx context.Context, idOrCode string, params *FetchChargesInBatchParams) (*FetchChargesInBatchResponse, error)
+	Pause(ctx context.Context, batchCode string) (*PauseBulkChargeResponse, error)
+	Resume(ctx context.Context, batchCode string) (*ResumeBulkChargeResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

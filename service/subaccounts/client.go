@@ -7,6 +7,14 @@ import (
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 )
 
+// Service represents the interface for subaccounts operations.
+type Service interface {
+	Create(ctx context.Context, req *CreateSubaccountRequest) (*SubaccountResponse, error)
+	List(ctx context.Context, perPage, page int) (*ListSubaccountsResponse, error)
+	Fetch(ctx context.Context, idOrCode string) (*SubaccountResponse, error)
+	Update(ctx context.Context, idOrCode string, req *UpdateSubaccountRequest) (*SubaccountResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

@@ -8,6 +8,14 @@ import (
 )
 
 // Client is the client for the Refunds service
+
+// Service represents the interface for refunds operations.
+type Service interface {
+	Create(ctx context.Context, req *CreateRefundRequest) (*RefundResponse, error)
+	List(ctx context.Context) (*ListRefundsResponse, error)
+	Fetch(ctx context.Context, id string) (*RefundResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

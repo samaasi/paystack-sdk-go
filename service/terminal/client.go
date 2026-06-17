@@ -7,6 +7,18 @@ import (
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 )
 
+// Service represents the interface for terminal operations.
+type Service interface {
+	SendEvent(ctx context.Context, terminalID string, req *SendEventRequest) (*TerminalEventResponse, error)
+	FetchEventStatus(ctx context.Context, terminalID, eventID string) (*TerminalEventResponse, error)
+	FetchPresence(ctx context.Context, terminalID string) (*TerminalPresenceResponse, error)
+	List(ctx context.Context, perPage, page int) (*ListTerminalsResponse, error)
+	Fetch(ctx context.Context, terminalID string) (*TerminalResponse, error)
+	Update(ctx context.Context, terminalID string, req *UpdateTerminalRequest) (*TerminalResponse, error)
+	Commission(ctx context.Context, serial string) (*TerminalResponse, error)
+	Decommission(ctx context.Context, serial string) (*TerminalResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

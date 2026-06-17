@@ -5,6 +5,15 @@ import (
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 )
 
+// Service represents the interface for transfer-control operations.
+type Service interface {
+	CheckBalance(ctx context.Context) (*CheckBalanceResponse, error)
+	ResendOTP(ctx context.Context, req *ResendOTPRequest) (*ResendOTPResponse, error)
+	DisableOTP(ctx context.Context) (*DisableOTPResponse, error)
+	FinalizeDisableOTP(ctx context.Context, req *FinalizeDisableOTPRequest) (*FinalizeDisableOTPResponse, error)
+	EnableOTP(ctx context.Context) (*EnableOTPResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }

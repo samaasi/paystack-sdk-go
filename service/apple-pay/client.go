@@ -6,6 +6,13 @@ import (
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 )
 
+// Service represents the interface for apple-pay operations.
+type Service interface {
+	RegisterDomain(ctx context.Context, req *RegisterDomainRequest) (*RegisterDomainResponse, error)
+	ListDomains(ctx context.Context) (*ListDomainsResponse, error)
+	UnregisterDomain(ctx context.Context, req *UnregisterDomainRequest) (*UnregisterDomainResponse, error)
+}
+
 type Client struct {
 	backend *backend.Client
 }
