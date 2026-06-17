@@ -8,3 +8,6 @@ type Meta struct {
 	Page      int `json:"page"`
 	PageCount int `json:"pageCount"`
 }
+
+// Metadata represents the custom metadata object accepted and returned by Paystack API endpoints.
+type Metadata map[string]interface{}
