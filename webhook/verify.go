@@ -54,9 +54,7 @@ var paystackIPs = []string{
 }
 
 // IsFromPaystackIP checks if the incoming HTTP request is from a known Paystack IP address.
-// This provides defense-in-depth security.
 func IsFromPaystackIP(req *http.Request) bool {
-	// Check X-Forwarded-For if behind a proxy
 	forwardedFor := req.Header.Get("X-Forwarded-For")
 	if forwardedFor != "" {
 		ips := strings.Split(forwardedFor, ",")
@@ -70,7 +68,6 @@ func IsFromPaystackIP(req *http.Request) bool {
 		}
 	}
 
-	// Fallback to RemoteAddr
 	remoteAddr := req.RemoteAddr
 	if idx := strings.LastIndex(remoteAddr, ":"); idx != -1 {
 		remoteAddr = remoteAddr[:idx]

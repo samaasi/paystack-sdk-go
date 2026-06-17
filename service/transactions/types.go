@@ -6,19 +6,19 @@ import (
 
 // InitializeRequest represents the payload for initializing a transaction
 type InitializeRequest struct {
-	Amount            string               `json:"amount"`
-	Email             string               `json:"email"`
-	Currency          paystackapi.Currency `json:"currency,omitempty"`
-	Reference         string               `json:"reference,omitempty"`
-	CallbackURL       string               `json:"callback_url,omitempty"`
-	Plan              string               `json:"plan,omitempty"`
-	InvoiceLimit      int                  `json:"invoice_limit,omitempty"`
-	Metadata          paystackapi.Metadata `json:"metadata,omitempty"`
+	Amount            string                `json:"amount"`
+	Email             string                `json:"email"`
+	Currency          paystackapi.Currency  `json:"currency,omitempty"`
+	Reference         string                `json:"reference,omitempty"`
+	CallbackURL       string                `json:"callback_url,omitempty"`
+	Plan              string                `json:"plan,omitempty"`
+	InvoiceLimit      int                   `json:"invoice_limit,omitempty"`
+	Metadata          paystackapi.Metadata  `json:"metadata,omitempty"`
 	Channels          []paystackapi.Channel `json:"channels,omitempty"`
-	SplitCode         string               `json:"split_code,omitempty"`
-	Subaccount        string               `json:"subaccount,omitempty"`
-	TransactionCharge int                  `json:"transaction_charge,omitempty"`
-	Bearer            paystackapi.Bearer   `json:"bearer,omitempty"`
+	SplitCode         string                `json:"split_code,omitempty"`
+	Subaccount        string                `json:"subaccount,omitempty"`
+	TransactionCharge int                   `json:"transaction_charge,omitempty"`
+	Bearer            paystackapi.Bearer    `json:"bearer,omitempty"`
 }
 
 // InitializeResponse represents the response for transaction initialization

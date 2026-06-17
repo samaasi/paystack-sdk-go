@@ -72,7 +72,6 @@ func (c *Client) Call(ctx context.Context, method, path string, body, v interfac
 	}
 
 	op := func() error {
-		// Extract headers from context
 		headers := paystackapi.GetCustomHeaders(ctx)
 		if headers == nil {
 			headers = make(map[string]string)
@@ -81,7 +80,6 @@ func (c *Client) Call(ctx context.Context, method, path string, body, v interfac
 		if idempotencyKey := paystackapi.GetIdempotencyKey(ctx); idempotencyKey != "" {
 			headers["Idempotency-Key"] = idempotencyKey
 		} else if method == http.MethodPost || method == http.MethodPut {
-			// Auto-generate idempotency key to prevent double charges on retries
 			if uuid, err := paystackapi.GenerateUUIDv4(); err == nil {
 				headers["Idempotency-Key"] = uuid
 			}
