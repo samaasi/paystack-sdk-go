@@ -8,11 +8,14 @@ A comprehensive and robust Go SDK for the [Paystack API](https://paystack.com/do
 
 ## Features
 
-- **Full Coverage**: Support for Transactions, Customers, Plans, Subscriptions, Transfers, and more.
-- **Context Aware**: All methods support `context.Context` for timeouts and cancellation.
-- **Idempotency**: Built-in support for Idempotency Keys via context.
-- **Robust Error Handling**: Typed errors for better control flow.
-- **Modular Design**: Services are isolated for better maintainability.
+- **Full API Coverage**: Comprehensive support for all 24 Paystack services (Transactions, Customers, Transfers, etc.).
+- **Smart Retries & Rate Limiting**: Built-in exponential backoff that respects Paystack's `429 Retry-After` headers and strictly avoids retrying non-retryable `4xx` errors.
+- **Automatic Idempotency**: Automatically generates UUIDv4 `Idempotency-Key` headers for all `POST` and `PUT` requests to prevent duplicate charges on network retries.
+- **Generic Pagination Iterators**: Best-in-class `paystackapi.Iterator[T]` for elegantly fetching paginated list endpoints.
+- **Strongly Typed & Safe**: Uses strictly typed enums (`paystackapi.Currency`, `paystackapi.Channel`, etc.) rather than raw strings to prevent runtime errors.
+- **100% Mockable**: Every service client is exposed as a Go `interface` allowing effortless unit testing via `gomock`.
+- **Webhook IP Allowlisting**: Defense-in-depth webhook signature verification and official IP address validation.
+- **Zero Dependencies**: Relies solely on the Go standard library for a lightweight footprint and maximum security.
 
 ## Installation
 
@@ -80,8 +83,9 @@ func main() {
 	client := paystack.NewClient(os.Getenv("PAYSTACK_SECRET_KEY"))
 
 	req := &transactions.InitializeRequest{
-		Email:  "customer@email.com",
-		Amount: "500000", // in kobo
+		Email:    "customer@email.com",
+		Amount:   "500000", // in kobo
+		Currency: paystackapi.CurrencyNGN,
 		Metadata: paystackapi.Metadata{
 			"cart_id": "398",
 			"custom_fields": []map[string]interface{}{
@@ -100,6 +104,80 @@ func main() {
 	}
 
 	fmt.Printf("Authorization URL: %s\n", resp.Data.AuthorizationURL)
+}
+```
+
+### Pagination with Iterators
+
+The SDK provides a generic Iterator pattern to effortlessly fetch records across multiple pages without manually handling `Meta` cursors or next-page logic.
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	paystack "github.com/samaasi/paystack-sdk-go"
+	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/service/transactions"
+)
+
+func main() {
+	client := paystack.NewClient("sk_test_...")
+	
+	// Create the iterator
+	iter := paystackapi.NewIterator(func(ctx context.Context, page, perPage int) (paystackapi.Pageable[transactions.VerifyData], error) {
+		return client.Transactions.List(ctx, &transactions.ListTransactionParams{
+			PerPage: perPage,
+			Page:    page,
+		})
+	}, 50) // fetch 50 items per network request
+
+	// Loop over ALL transactions sequentially
+	for iter.Next(context.Background()) {
+		tx := iter.Value()
+		fmt.Printf("Transaction ID: %d, Status: %s\n", tx.ID, tx.Status)
+	}
+
+	if err := iter.Err(); err != nil {
+		log.Fatal("Error during iteration:", err)
+	}
+}
+```
+
+### Webhook Verification
+
+Easily and securely verify incoming webhooks from Paystack using HMAC validation and IP Allowlisting.
+
+```go
+package main
+
+import (
+	"log"
+	"net/http"
+
+	"github.com/samaasi/paystack-sdk-go/webhook"
+)
+
+func webhookHandler(w http.ResponseWriter, r *http.Request) {
+	// Defense-in-depth: Verify request originates from Paystack's official IPs
+	if !webhook.IsFromPaystackIP(r) {
+		http.Error(w, "Unauthorized IP", http.StatusUnauthorized)
+		return
+	}
+
+	// Parse and verify the payload using your secret key
+	event, err := webhook.Verify(r, "PAYSTACK_SECRET_KEY")
+	if err != nil {
+		log.Printf("Webhook validation failed: %v", err)
+		http.Error(w, "Invalid signature", http.StatusUnauthorized)
+		return
+	}
+
+	log.Printf("Received event: %s", event.Event)
+	w.WriteHeader(http.StatusOK)
 }
 ```
 
