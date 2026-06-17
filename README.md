@@ -128,14 +128,18 @@ func main() {
 	client := paystack.NewClient("sk_test_...")
 	ctx := context.Background()
 
-	iter := paystackapi.NewIterator(ctx, func(ctx context.Context, page, perPage int) (paystackapi.Response[[]transactions.VerifyData], error) {
-		return client.Transactions.List(ctx, &transactions.ListTransactionParams{
-			PerPage: perPage, 
-			Page:    page,
+	iter := paystackapi.NewIterator(func(ctx context.Context, page, perPage int) (paystackapi.Response[[]transactions.VerifyData], error) {
+		resp, err := client.Transactions.List(ctx, &transactions.ListTransactionParams{
+			Page:    &page,
+			PerPage: &perPage,
 		})
+		if err != nil {
+			return paystackapi.Response[[]transactions.VerifyData]{}, err
+		}
+		return resp.Response, nil
 	})
 
-	for iter.Next() {
+	for iter.Next(ctx) {
 		tx := iter.Value()
 		fmt.Printf("Transaction ID: %d, Status: %s\n", tx.ID, tx.Status)
 	}
