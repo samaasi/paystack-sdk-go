@@ -7,7 +7,6 @@ type FetchNextPageFunc[T any] func(ctx context.Context, page, perPage int) (Resp
 
 // Iterator provides a convenient way to iterate over paginated API responses.
 type Iterator[T any] struct {
-	ctx         context.Context
 	fetchNext   FetchNextPageFunc[T]
 	currentPage []T
 	meta        *Meta
@@ -17,23 +16,23 @@ type Iterator[T any] struct {
 }
 
 // NewIterator creates a new Iterator.
-func NewIterator[T any](ctx context.Context, fetchNext FetchNextPageFunc[T]) *Iterator[T] {
+func NewIterator[T any](fetchNext FetchNextPageFunc[T]) *Iterator[T] {
 	return &Iterator[T]{
-		ctx:       ctx,
 		fetchNext: fetchNext,
 		index:     -1,
 	}
 }
 
 // Next advances the iterator to the next item. Returns false when exhausted or on error.
-func (it *Iterator[T]) Next() bool {
+// ctx is passed explicitly per call to avoid storing a context in the struct.
+func (it *Iterator[T]) Next(ctx context.Context) bool {
 	if it.err != nil {
 		return false
 	}
 
 	if !it.initialized {
 		it.initialized = true
-		if !it.fetchPage(1, 50) {
+		if !it.fetchPage(ctx, 1, 50) {
 			return false
 		}
 	}
@@ -47,10 +46,9 @@ func (it *Iterator[T]) Next() bool {
 		if it.meta.Page >= it.meta.PageCount {
 			return false
 		}
-		if !it.fetchPage(it.meta.Page+1, it.meta.PerPage) {
+		if !it.fetchPage(ctx, it.meta.Page+1, it.meta.PerPage) {
 			return false
 		}
-
 		it.index = 0
 		return len(it.currentPage) > 0
 	}
@@ -58,13 +56,12 @@ func (it *Iterator[T]) Next() bool {
 	return false
 }
 
-func (it *Iterator[T]) fetchPage(page, perPage int) bool {
-	resp, err := it.fetchNext(it.ctx, page, perPage)
+func (it *Iterator[T]) fetchPage(ctx context.Context, page, perPage int) bool {
+	resp, err := it.fetchNext(ctx, page, perPage)
 	if err != nil {
 		it.err = err
 		return false
 	}
-
 	it.currentPage = resp.Data
 	it.meta = resp.Meta
 	return true
