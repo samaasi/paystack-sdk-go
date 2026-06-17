@@ -71,18 +71,22 @@ func (c *Client) Call(ctx context.Context, method, path string, body, v interfac
 		}
 	}
 
+	// Generate idempotency key once so all retry attempts share the same key.
+	idempotencyKey := paystackapi.GetIdempotencyKey(ctx)
+	if idempotencyKey == "" && (method == http.MethodPost || method == http.MethodPut) {
+		if uuid, err := paystackapi.GenerateUUIDv4(); err == nil {
+			idempotencyKey = uuid
+		}
+	}
+
 	op := func() error {
 		headers := paystackapi.GetCustomHeaders(ctx)
 		if headers == nil {
 			headers = make(map[string]string)
 		}
 
-		if idempotencyKey := paystackapi.GetIdempotencyKey(ctx); idempotencyKey != "" {
+		if idempotencyKey != "" {
 			headers["Idempotency-Key"] = idempotencyKey
-		} else if method == http.MethodPost || method == http.MethodPut {
-			if uuid, err := paystackapi.GenerateUUIDv4(); err == nil {
-				headers["Idempotency-Key"] = uuid
-			}
 		}
 
 		reqOpts := &RequestOptions{
