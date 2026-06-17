@@ -107,8 +107,11 @@ type Customer struct {
 
 // ListTransactionParams represents query parameters for listing transactions
 type ListTransactionParams struct {
-	PerPage int `query:"perPage"`
-	Page    int `query:"page"`
+	PerPage *int    `query:"perPage,omitempty"`
+	Page    *int    `query:"page,omitempty"`
+	Status  *string `query:"status,omitempty"`
+	From    *string `query:"from,omitempty"`
+	To      *string `query:"to,omitempty"`
 }
 
 // ListTransactionResponse represents the response for listing transactions
