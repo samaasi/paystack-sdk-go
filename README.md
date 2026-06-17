@@ -72,6 +72,7 @@ import (
 	"os"
 
 	paystack "github.com/samaasi/paystack-sdk-go"
+	"github.com/samaasi/paystack-sdk-go/paystackapi"
 	"github.com/samaasi/paystack-sdk-go/service/transactions"
 )
 
@@ -81,6 +82,16 @@ func main() {
 	req := &transactions.InitializeRequest{
 		Email:  "customer@email.com",
 		Amount: "500000", // in kobo
+		Metadata: paystackapi.Metadata{
+			"cart_id": "398",
+			"custom_fields": []map[string]interface{}{
+				{
+					"display_name":  "Invoice ID",
+					"variable_name": "invoice_id",
+					"value":         "INV-001",
+				},
+			},
+		},
 	}
 
 	resp, err := client.Transactions.Initialize(context.Background(), req)

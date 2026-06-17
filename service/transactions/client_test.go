@@ -2,11 +2,14 @@ package transactions
 
 import (
 	"context"
+	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
+	"github.com/samaasi/paystack-sdk-go/paystackapi"
 )
 
 func TestInitialize(t *testing.T) {
@@ -83,5 +86,68 @@ func TestList(t *testing.T) {
 	}
 	if len(resp.Data) != 1 {
 		t.Errorf("Expected 1 transaction, got %d", len(resp.Data))
+	}
+}
+
+func TestInitializeWithMetadata(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, _ := io.ReadAll(r.Body)
+		var payload map[string]interface{}
+		if err := json.Unmarshal(body, &payload); err != nil {
+			t.Fatalf("Failed to parse request body: %v", err)
+		}
+		meta, ok := payload["metadata"].(map[string]interface{})
+		if !ok {
+			t.Fatal("Expected metadata in request body")
+		}
+		if meta["cart_id"] != "398" {
+			t.Errorf("Expected cart_id 398, got %v", meta["cart_id"])
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":true,"message":"Authorization URL created","data":{"authorization_url":"https://checkout.paystack.com/test","access_code":"test_code","reference":"ref_meta"}}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
+	req := &InitializeRequest{
+		Amount: "50000",
+		Email:  "meta@test.com",
+		Metadata: paystackapi.Metadata{
+			"cart_id": "398",
+			"custom_fields": []map[string]interface{}{
+				{
+					"display_name":  "Invoice ID",
+					"variable_name": "invoice_id",
+					"value":         "INV-001",
+				},
+			},
+		},
+	}
+	resp, err := client.Initialize(context.Background(), req)
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if resp.Data.Reference != "ref_meta" {
+		t.Errorf("Expected reference ref_meta, got %s", resp.Data.Reference)
+	}
+}
+
+func TestVerifyWithMetadata(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":true,"message":"Verification successful","data":{"id":1,"status":"success","reference":"ref_meta","amount":50000,"metadata":{"cart_id":"398","custom_fields":[{"display_name":"Invoice ID","variable_name":"invoice_id","value":"INV-001"}]}}}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
+	resp, err := client.Verify(context.Background(), "ref_meta")
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if resp.Data.Metadata == nil {
+		t.Fatal("Expected metadata in response, got nil")
+	}
+	if resp.Data.Metadata["cart_id"] != "398" {
+		t.Errorf("Expected cart_id 398, got %v", resp.Data.Metadata["cart_id"])
 	}
 }
