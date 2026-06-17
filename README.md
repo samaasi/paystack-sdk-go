@@ -126,17 +126,17 @@ import (
 
 func main() {
 	client := paystack.NewClient("sk_test_...")
-	
-	// Create the iterator
-	iter := paystackapi.NewIterator(func(ctx context.Context, page, perPage int) (paystackapi.Pageable[transactions.VerifyData], error) {
+	ctx := context.Background()
+
+	iter := paystackapi.NewIterator(ctx, func(ctx context.Context, page, perPage int) (paystackapi.Response[[]transactions.VerifyData], error) {
 		return client.Transactions.List(ctx, &transactions.ListTransactionParams{
 			PerPage: perPage,
 			Page:    page,
 		})
-	}, 50) // fetch 50 items per network request
+	})
 
 	// Loop over ALL transactions sequentially
-	for iter.Next(context.Background()) {
+	for iter.Next() {
 		tx := iter.Value()
 		fmt.Printf("Transaction ID: %d, Status: %s\n", tx.ID, tx.Status)
 	}
@@ -168,9 +168,9 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Parse and verify the payload using your secret key
-	event, err := webhook.Verify(r, "PAYSTACK_SECRET_KEY")
-	if err != nil {
+	// Parse and verify the payload signature using your secret key
+	var event webhook.Event
+	if err := webhook.Parse(r, "PAYSTACK_SECRET_KEY", &event); err != nil {
 		log.Printf("Webhook validation failed: %v", err)
 		http.Error(w, "Invalid signature", http.StatusUnauthorized)
 		return
