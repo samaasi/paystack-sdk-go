@@ -54,9 +54,16 @@ ctx = paystackapi.WithIdempotencyKey(ctx, "your-unique-key")
 
 ### Pagination Iterator
 ```go
-iter := paystackapi.NewIterator(func(ctx context.Context, page, perPage int) (paystackapi.Pageable[transactions.VerifyData], error) {
-    return client.Transactions.List(ctx, &transactions.ListTransactionParams{Page: page, PerPage: perPage})
-}, 50)
+iter := paystackapi.NewIterator(func(ctx context.Context, page, perPage int) (paystackapi.Response[[]transactions.VerifyData], error) {
+    resp, err := client.Transactions.List(ctx, &transactions.ListTransactionParams{
+        Page:    &page,
+        PerPage: &perPage,
+    })
+    if err != nil {
+        return paystackapi.Response[[]transactions.VerifyData]{}, err
+    }
+    return resp.Response, nil
+})
 
 for iter.Next(ctx) {
     tx := iter.Value()
