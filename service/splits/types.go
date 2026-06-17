@@ -32,7 +32,7 @@ type Subaccount struct {
 		PrimaryContactName  string      `json:"primary_contact_name"`
 		PrimaryContactEmail string      `json:"primary_contact_email"`
 		PrimaryContactPhone string      `json:"primary_contact_phone"`
-		Metadata            interface{} `json:"metadata"`
+		Metadata            paystackapi.Metadata `json:"metadata"`
 		PercentageCharge    float64     `json:"percentage_charge"`
 		SettlementBank      string      `json:"settlement_bank"`
 		AccountNumber       string      `json:"account_number"`

@@ -1,6 +1,10 @@
 package webhook
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/samaasi/paystack-sdk-go/paystackapi"
+)
 
 // EventType constants representing the various Paystack webhook events
 const (
@@ -77,7 +81,7 @@ type ChargeSuccessEvent struct {
 	Channel         string          `json:"channel"`
 	Currency        string          `json:"currency"`
 	IPAddress       string          `json:"ip_address"`
-	Metadata        json.RawMessage `json:"metadata,omitempty"`
+	Metadata        paystackapi.Metadata `json:"metadata,omitempty"`
 	Log             interface{}     `json:"log,omitempty"`
 	Fees            int             `json:"fees,omitempty"`
 	Customer        Customer        `json:"customer"`
@@ -92,7 +96,7 @@ type Customer struct {
 	Email        string      `json:"email"`
 	CustomerCode string      `json:"customer_code"`
 	Phone        string      `json:"phone"`
-	Metadata     interface{} `json:"metadata"`
+	Metadata     paystackapi.Metadata `json:"metadata"`
 	RiskAction   string      `json:"risk_action"`
 }
 
@@ -147,7 +151,7 @@ type Recipient struct {
 	Email         interface{} `json:"email"`
 	ID            int         `json:"id"`
 	Integration   int         `json:"integration"`
-	Metadata      interface{} `json:"metadata"`
+	Metadata      paystackapi.Metadata `json:"metadata"`
 	Name          string      `json:"name"`
 	RecipientCode string      `json:"recipient_code"`
 	Type          string      `json:"type"`
@@ -239,7 +243,7 @@ type PaymentRequestEvent struct {
 	Status           string      `json:"status"`
 	Paid             bool        `json:"paid"`
 	PaidAt           string      `json:"paid_at"`
-	Metadata         interface{} `json:"metadata"`
+	Metadata         paystackapi.Metadata `json:"metadata"`
 	Notifications    interface{} `json:"notifications"`
 	OfflineReference string      `json:"offline_reference"`
 	Customer         Customer    `json:"customer"`

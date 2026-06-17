@@ -20,7 +20,7 @@ type VirtualAccount struct {
 	AccountNumber string                 `json:"account_number"`
 	Assigned      bool                   `json:"assigned"`
 	Currency      string                 `json:"currency"`
-	Metadata      map[string]interface{} `json:"metadata"`
+	Metadata      paystackapi.Metadata   `json:"metadata"`
 	Active        bool                   `json:"active"`
 	SplitConfig   map[string]interface{} `json:"split_config"`
 	Bank          Bank                   `json:"bank"`

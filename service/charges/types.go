@@ -13,7 +13,7 @@ type CreateChargeRequest struct {
 	Reference         string                 `json:"reference,omitempty"`
 	Birthday          string                 `json:"birthday,omitempty"`
 	DeviceID          string                 `json:"device_id,omitempty"`
-	Metadata          map[string]interface{} `json:"metadata,omitempty"`
+	Metadata          paystackapi.Metadata   `json:"metadata,omitempty"`
 	Bank              *BankSource            `json:"bank,omitempty"`
 	MobileMoney       *MobileMoneySource     `json:"mobile_money,omitempty"`
 	USSD              *USSDSource            `json:"ussd,omitempty"`

@@ -1,8 +1,6 @@
 package subaccounts
 
 import (
-	"encoding/json"
-
 	"github.com/samaasi/paystack-sdk-go/paystackapi"
 )
 
@@ -14,7 +12,7 @@ type Subaccount struct {
 	PrimaryContactName  string          `json:"primary_contact_name"`
 	PrimaryContactEmail string          `json:"primary_contact_email"`
 	PrimaryContactPhone string          `json:"primary_contact_phone"`
-	Metadata            json.RawMessage `json:"metadata"`
+	Metadata            paystackapi.Metadata `json:"metadata"`
 	PercentageCharge    float64         `json:"percentage_charge"`
 	SettlementBank      string          `json:"settlement_bank"`
 	AccountNumber       string          `json:"account_number"`
@@ -35,7 +33,7 @@ type CreateSubaccountRequest struct {
 	PrimaryContactName  string                 `json:"primary_contact_name,omitempty"`
 	PrimaryContactEmail string                 `json:"primary_contact_email,omitempty"`
 	PrimaryContactPhone string                 `json:"primary_contact_phone,omitempty"`
-	Metadata            map[string]interface{} `json:"metadata,omitempty"`
+	Metadata            paystackapi.Metadata `json:"metadata,omitempty"`
 }
 
 type UpdateSubaccountRequest struct {
@@ -47,7 +45,7 @@ type UpdateSubaccountRequest struct {
 	PrimaryContactName  string                 `json:"primary_contact_name,omitempty"`
 	PrimaryContactEmail string                 `json:"primary_contact_email,omitempty"`
 	PrimaryContactPhone string                 `json:"primary_contact_phone,omitempty"`
-	Metadata            map[string]interface{} `json:"metadata,omitempty"`
+	Metadata            paystackapi.Metadata `json:"metadata,omitempty"`
 	Active              *bool                  `json:"active,omitempty"`
 }
 

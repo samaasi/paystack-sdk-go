@@ -1,7 +1,6 @@
 package paymentpages
 
 import (
-	"encoding/json"
 	"github.com/samaasi/paystack-sdk-go/paystackapi"
 )
 
@@ -19,7 +18,7 @@ type Page struct {
 	RedirectURL  string          `json:"redirect_url"`
 	CustomFields []interface{}   `json:"custom_fields"`
 	Type         string          `json:"type"`
-	Metadata     json.RawMessage `json:"metadata"`
+	Metadata     paystackapi.Metadata `json:"metadata"`
 	CreatedAt    string          `json:"created_at"`
 	UpdatedAt    string          `json:"updated_at"`
 }
@@ -32,7 +31,7 @@ type CreatePageRequest struct {
 	Slug         string        `json:"slug,omitempty"`
 	RedirectURL  string        `json:"redirect_url,omitempty"`
 	CustomFields []interface{} `json:"custom_fields,omitempty"`
-	Metadata     interface{}   `json:"metadata,omitempty"`
+	Metadata     paystackapi.Metadata `json:"metadata,omitempty"`
 }
 
 // PageResponse represents the response for a single page

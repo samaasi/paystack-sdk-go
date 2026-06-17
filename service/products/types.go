@@ -19,7 +19,7 @@ type Product struct {
 	Type              string        `json:"type"`
 	InStock           bool          `json:"in_stock"`
 	Unlimited         bool          `json:"unlimited"`
-	Metadata          interface{}   `json:"metadata"`
+	Metadata          paystackapi.Metadata `json:"metadata"`
 	Files             []interface{} `json:"files"`
 	SuccessMessage    string        `json:"success_message"`
 	RedirectURL       string        `json:"redirect_url"`

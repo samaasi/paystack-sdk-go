@@ -10,7 +10,7 @@ type CreateCustomerRequest struct {
 	FirstName string                 `json:"first_name,omitempty"`
 	LastName  string                 `json:"last_name,omitempty"`
 	Phone     string                 `json:"phone,omitempty"`
-	Metadata  map[string]interface{} `json:"metadata,omitempty"`
+	Metadata  paystackapi.Metadata `json:"metadata,omitempty"`
 }
 
 // UpdateCustomerRequest represents the request to update a customer
@@ -18,7 +18,7 @@ type UpdateCustomerRequest struct {
 	FirstName string                 `json:"first_name,omitempty"`
 	LastName  string                 `json:"last_name,omitempty"`
 	Phone     string                 `json:"phone,omitempty"`
-	Metadata  map[string]interface{} `json:"metadata,omitempty"`
+	Metadata  paystackapi.Metadata `json:"metadata,omitempty"`
 }
 
 // ValidateCustomerRequest represents the request to validate a customer
@@ -68,7 +68,7 @@ type CustomerData struct {
 	LastName        string                 `json:"last_name"`
 	Email           string                 `json:"email"`
 	Phone           string                 `json:"phone"`
-	Metadata        map[string]interface{} `json:"metadata"`
+	Metadata        paystackapi.Metadata `json:"metadata"`
 	Domain          string                 `json:"domain"`
 	CustomerCode    string                 `json:"customer_code"`
 	RiskAction      string                 `json:"risk_action"`

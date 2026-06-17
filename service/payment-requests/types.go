@@ -1,7 +1,6 @@
 package paymentrequests
 
 import (
-	"encoding/json"
 	"github.com/samaasi/paystack-sdk-go/paystackapi"
 )
 
@@ -22,7 +21,7 @@ type PaymentRequest struct {
 	Status           string          `json:"status"`
 	Paid             bool            `json:"paid"`
 	PaidAt           string          `json:"paid_at"`
-	Metadata         json.RawMessage `json:"metadata"`
+	Metadata         paystackapi.Metadata `json:"metadata"`
 	Notifications    []interface{}   `json:"notifications"`
 	OfflineReference string          `json:"offline_reference"`
 	Customer         int             `json:"customer"`
