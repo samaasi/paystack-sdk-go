@@ -17,7 +17,7 @@ func Verify(secretKey string, body []byte, signature string) bool {
 	h := hmac.New(sha512.New, []byte(secretKey))
 	h.Write(body)
 	expectedSignature := hex.EncodeToString(h.Sum(nil))
-	return expectedSignature == signature
+	return hmac.Equal([]byte(expectedSignature), []byte(signature))
 }
 
 // Parse parses the webhook request and verifies the signature.

@@ -2,7 +2,6 @@ package backend
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -10,6 +9,7 @@ import (
 	"reflect"
 	"runtime"
 	"strconv"
+	"strings"
 )
 
 const (
@@ -22,16 +22,10 @@ type RequestOptions struct {
 }
 
 // NewRequest creates a new HTTP request with the necessary headers
-func NewRequest(method, urlStr string, apiKey string, body interface{}, opts *RequestOptions) (*http.Request, error) {
+func NewRequest(method, urlStr string, apiKey string, bodyBytes []byte, opts *RequestOptions) (*http.Request, error) {
 	var buf io.Reader
-	if body != nil {
-		var b []byte
-		var err error
-		b, err = json.Marshal(body)
-		if err != nil {
-			return nil, err
-		}
-		buf = bytes.NewBuffer(b)
+	if bodyBytes != nil {
+		buf = bytes.NewReader(bodyBytes)
 	}
 
 	req, err := http.NewRequest(method, urlStr, buf)
@@ -77,7 +71,6 @@ func EncodeQueryParams(v interface{}) (string, error) {
 		field := typ.Field(i)
 		value := val.Field(i)
 
-		// Get query tag
 		tag := field.Tag.Get("query")
 		if tag == "" {
 			tag = field.Name
@@ -86,18 +79,34 @@ func EncodeQueryParams(v interface{}) (string, error) {
 			continue
 		}
 
-		// Handle zero values (omitempty behavior logic could be added here if needed)
-		if value.IsZero() {
+		isPointer := value.Kind() == reflect.Ptr
+		if isPointer {
+			if value.IsNil() {
+				continue
+			}
+			value = value.Elem()
+		}
+
+		tagParts := strings.Split(tag, ",")
+		tagName := tagParts[0]
+		omitempty := false
+		for _, part := range tagParts[1:] {
+			if part == "omitempty" {
+				omitempty = true
+			}
+		}
+
+		if omitempty && !isPointer && value.IsZero() {
 			continue
 		}
 
 		switch value.Kind() {
 		case reflect.String:
-			values.Add(tag, value.String())
+			values.Add(tagName, value.String())
 		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-			values.Add(tag, strconv.FormatInt(value.Int(), 10))
+			values.Add(tagName, strconv.FormatInt(value.Int(), 10))
 		case reflect.Bool:
-			values.Add(tag, strconv.FormatBool(value.Bool()))
+			values.Add(tagName, strconv.FormatBool(value.Bool()))
 		}
 	}
 
