@@ -80,6 +80,11 @@ func (c *Client) Call(ctx context.Context, method, path string, body, v interfac
 
 		if idempotencyKey := paystackapi.GetIdempotencyKey(ctx); idempotencyKey != "" {
 			headers["Idempotency-Key"] = idempotencyKey
+		} else if method == http.MethodPost || method == http.MethodPut {
+			// Auto-generate idempotency key to prevent double charges on retries
+			if uuid, err := paystackapi.GenerateUUIDv4(); err == nil {
+				headers["Idempotency-Key"] = uuid
+			}
 		}
 
 		reqOpts := &RequestOptions{

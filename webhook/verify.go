@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 )
 
 // Verify verifies the Paystack webhook signature.
@@ -43,4 +44,43 @@ func Parse(r *http.Request, secretKey string, event *Event) error {
 	}
 
 	return nil
+}
+
+// paystackIPs contains the official Paystack webhook IP addresses for production
+var paystackIPs = []string{
+	"52.31.239.247",
+	"52.89.246.173",
+	"52.214.14.220",
+}
+
+// IsFromPaystackIP checks if the incoming HTTP request is from a known Paystack IP address.
+// This provides defense-in-depth security.
+func IsFromPaystackIP(req *http.Request) bool {
+	// Check X-Forwarded-For if behind a proxy
+	forwardedFor := req.Header.Get("X-Forwarded-For")
+	if forwardedFor != "" {
+		ips := strings.Split(forwardedFor, ",")
+		if len(ips) > 0 {
+			clientIP := strings.TrimSpace(ips[0])
+			for _, ip := range paystackIPs {
+				if clientIP == ip {
+					return true
+				}
+			}
+		}
+	}
+
+	// Fallback to RemoteAddr
+	remoteAddr := req.RemoteAddr
+	if idx := strings.LastIndex(remoteAddr, ":"); idx != -1 {
+		remoteAddr = remoteAddr[:idx]
+	}
+
+	for _, ip := range paystackIPs {
+		if remoteAddr == ip {
+			return true
+		}
+	}
+
+	return false
 }
