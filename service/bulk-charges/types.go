@@ -33,10 +33,10 @@ type ListBulkChargesResponse struct {
 
 // ListBulkChargesParams represents query parameters for listing bulk charges
 type ListBulkChargesParams struct {
-	PerPage int    `json:"perPage,omitempty"`
-	Page    int    `json:"page,omitempty"`
-	From    string `json:"from,omitempty"`
-	To      string `json:"to,omitempty"`
+	PerPage int    `query:"perPage,omitempty"`
+	Page    int    `query:"page,omitempty"`
+	From    string `query:"from,omitempty"`
+	To      string `query:"to,omitempty"`
 }
 
 // FetchBulkChargeResponse represents the response for fetching a bulk charge batch
@@ -63,11 +63,11 @@ type FetchChargesInBatchResponse struct {
 
 // FetchChargesInBatchParams represents query parameters for fetching charges in a batch
 type FetchChargesInBatchParams struct {
-	Status  string `json:"status,omitempty"`
-	PerPage int    `json:"perPage,omitempty"`
-	Page    int    `json:"page,omitempty"`
-	From    string `json:"from,omitempty"`
-	To      string `json:"to,omitempty"`
+	Status  string `query:"status,omitempty"`
+	PerPage int    `query:"perPage,omitempty"`
+	Page    int    `query:"page,omitempty"`
+	From    string `query:"from,omitempty"`
+	To      string `query:"to,omitempty"`
 }
 
 // BulkChargeUnitDetails represents details of a specific charge in a bulk batch
