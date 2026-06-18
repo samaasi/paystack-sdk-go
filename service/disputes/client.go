@@ -32,8 +32,19 @@ func NewClient(backend *backend.Client) *Client {
 
 // List lists disputes
 func (c *Client) List(ctx context.Context, params *ListDisputesParams) (*DisputeListResponse, error) {
+	path := "/dispute"
+	if params != nil {
+		query, err := backend.EncodeQueryParams(params)
+		if err != nil {
+			return nil, err
+		}
+		if query != "" {
+			path = fmt.Sprintf("%s?%s", path, query)
+		}
+	}
+
 	resp := &DisputeListResponse{}
-	err := c.backend.Call(ctx, "GET", "/dispute", params, resp)
+	err := c.backend.Call(ctx, "GET", path, nil, resp)
 	if err != nil {
 		return nil, err
 	}
@@ -108,8 +119,19 @@ func (c *Client) Resolve(ctx context.Context, id string, req *ResolveDisputeRequ
 
 // Export exports disputes
 func (c *Client) Export(ctx context.Context, params *ListDisputesParams) (*ExportDisputesResponse, error) {
+	path := "/dispute/export"
+	if params != nil {
+		query, err := backend.EncodeQueryParams(params)
+		if err != nil {
+			return nil, err
+		}
+		if query != "" {
+			path = fmt.Sprintf("%s?%s", path, query)
+		}
+	}
+
 	resp := &ExportDisputesResponse{}
-	err := c.backend.Call(ctx, "GET", "/dispute/export", params, resp)
+	err := c.backend.Call(ctx, "GET", path, nil, resp)
 	if err != nil {
 		return nil, err
 	}
