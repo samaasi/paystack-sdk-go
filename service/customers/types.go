@@ -80,8 +80,8 @@ type CustomerData struct {
 
 // ListCustomersParams represents query parameters for listing customers
 type ListCustomersParams struct {
-	PerPage int    `json:"perPage,omitempty"`
-	Page    int    `json:"page,omitempty"`
-	From    string `json:"from,omitempty"`
-	To      string `json:"to,omitempty"`
+	PerPage int    `query:"perPage,omitempty"`
+	Page    int    `query:"page,omitempty"`
+	From    string `query:"from,omitempty"`
+	To      string `query:"to,omitempty"`
 }
