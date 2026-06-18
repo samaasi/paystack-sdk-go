@@ -90,7 +90,7 @@ func (c *Client) FetchCharges(ctx context.Context, idOrCode string, params *Fetc
 // Pause pauses a bulk charge batch
 func (c *Client) Pause(ctx context.Context, batchCode string) (*PauseBulkChargeResponse, error) {
 	resp := &PauseBulkChargeResponse{}
-	err := c.backend.Call(ctx, "GET", fmt.Sprintf("/bulkcharge/pause/%s", batchCode), nil, resp)
+	err := c.backend.Call(ctx, "POST", fmt.Sprintf("/bulkcharge/pause/%s", batchCode), nil, resp)
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +100,7 @@ func (c *Client) Pause(ctx context.Context, batchCode string) (*PauseBulkChargeR
 // Resume resumes a paused bulk charge batch
 func (c *Client) Resume(ctx context.Context, batchCode string) (*ResumeBulkChargeResponse, error) {
 	resp := &ResumeBulkChargeResponse{}
-	err := c.backend.Call(ctx, "GET", fmt.Sprintf("/bulkcharge/resume/%s", batchCode), nil, resp)
+	err := c.backend.Call(ctx, "POST", fmt.Sprintf("/bulkcharge/resume/%s", batchCode), nil, resp)
 	if err != nil {
 		return nil, err
 	}
