@@ -42,8 +42,19 @@ func (c *Client) Create(ctx context.Context, req *CreateCustomerRequest) (*Custo
 
 // List lists customers
 func (c *Client) List(ctx context.Context, params *ListCustomersParams) (*CustomerListResponse, error) {
+	path := "/customer"
+	if params != nil {
+		query, err := backend.EncodeQueryParams(params)
+		if err != nil {
+			return nil, err
+		}
+		if query != "" {
+			path = fmt.Sprintf("%s?%s", path, query)
+		}
+	}
+
 	resp := &CustomerListResponse{}
-	err := c.backend.Call(ctx, "GET", "/customer", params, resp)
+	err := c.backend.Call(ctx, "GET", path, nil, resp)
 	if err != nil {
 		return nil, err
 	}
