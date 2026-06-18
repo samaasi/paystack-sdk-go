@@ -36,6 +36,10 @@ func (b *Backoff) Retry(ctx context.Context, op func() error) error {
 			return nil
 		}
 
+		if ctx.Err() != nil {
+			return ctx.Err()
+		}
+
 		if !isRetryable(err) {
 			return err
 		}
