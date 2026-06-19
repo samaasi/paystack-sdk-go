@@ -104,6 +104,90 @@ func TestSubmitOTP(t *testing.T) {
 	}
 }
 
+func TestSubmitPhone(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("Expected method POST, got %s", r.Method)
+		}
+		if r.URL.Path != "/charge/submit_phone" {
+			t.Errorf("Expected path /charge/submit_phone, got %s", r.URL.Path)
+		}
+		fmt.Fprint(w, `{"status": true, "message": "Phone submitted", "data": {"reference": "ref_123", "status": "send_otp"}}`)
+	}))
+	defer server.Close()
+
+	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(server.URL)))
+
+	resp, err := client.SubmitPhone(context.Background(), &SubmitPhoneRequest{Phone: "+2348000000000", Reference: "ref_123"})
+	if err != nil {
+		t.Fatalf("SubmitPhone failed: %v", err)
+	}
+	if !resp.Status {
+		t.Errorf("Expected status true, got false")
+	}
+	if resp.Data.Reference != "ref_123" {
+		t.Errorf("Expected reference ref_123, got %s", resp.Data.Reference)
+	}
+}
+
+func TestSubmitBirthday(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("Expected method POST, got %s", r.Method)
+		}
+		if r.URL.Path != "/charge/submit_birthday" {
+			t.Errorf("Expected path /charge/submit_birthday, got %s", r.URL.Path)
+		}
+		fmt.Fprint(w, `{"status": true, "message": "Birthday submitted", "data": {"reference": "ref_123", "status": "success"}}`)
+	}))
+	defer server.Close()
+
+	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(server.URL)))
+
+	resp, err := client.SubmitBirthday(context.Background(), &SubmitBirthdayRequest{Birthday: "1990-01-01", Reference: "ref_123"})
+	if err != nil {
+		t.Fatalf("SubmitBirthday failed: %v", err)
+	}
+	if !resp.Status {
+		t.Errorf("Expected status true, got false")
+	}
+	if resp.Data.Reference != "ref_123" {
+		t.Errorf("Expected reference ref_123, got %s", resp.Data.Reference)
+	}
+}
+
+func TestSubmitAddress(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("Expected method POST, got %s", r.Method)
+		}
+		if r.URL.Path != "/charge/submit_address" {
+			t.Errorf("Expected path /charge/submit_address, got %s", r.URL.Path)
+		}
+		fmt.Fprint(w, `{"status": true, "message": "Address submitted", "data": {"reference": "ref_123", "status": "success"}}`)
+	}))
+	defer server.Close()
+
+	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(server.URL)))
+
+	resp, err := client.SubmitAddress(context.Background(), &SubmitAddressRequest{
+		Address:   "1 Test Street",
+		City:      "Lagos",
+		State:     "Lagos",
+		ZipCode:   "100001",
+		Reference: "ref_123",
+	})
+	if err != nil {
+		t.Fatalf("SubmitAddress failed: %v", err)
+	}
+	if !resp.Status {
+		t.Errorf("Expected status true, got false")
+	}
+	if resp.Data.Reference != "ref_123" {
+		t.Errorf("Expected reference ref_123, got %s", resp.Data.Reference)
+	}
+}
+
 func TestCheckPending(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
