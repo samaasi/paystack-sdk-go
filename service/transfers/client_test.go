@@ -37,6 +37,39 @@ func TestInitiate(t *testing.T) {
 	}
 }
 
+func TestBulkTransfer(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("Expected POST request, got %s", r.Method)
+		}
+		if r.URL.Path != "/transfer/bulk" {
+			t.Errorf("Expected path /transfer/bulk, got %s", r.URL.Path)
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":true,"message":"Transfers queued","data":[{"reference":"ref_a","transfer_code":"TRF_a","status":"pending"},{"reference":"ref_b","transfer_code":"TRF_b","status":"pending"}]}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
+	req := &BulkTransferRequest{
+		Currency: "NGN",
+		Transfers: []InitiateRequest{
+			{Source: "balance", Amount: 10000, Recipient: "RCP_aaa"},
+			{Source: "balance", Amount: 20000, Recipient: "RCP_bbb"},
+		},
+	}
+	resp, err := client.BulkTransfer(context.Background(), req)
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if len(resp.Data) != 2 {
+		t.Errorf("Expected 2 transfers, got %d", len(resp.Data))
+	}
+	if resp.Data[0].TransferCode != "TRF_a" {
+		t.Errorf("Expected first transfer code TRF_a, got %s", resp.Data[0].TransferCode)
+	}
+}
+
 func TestFinalize(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -78,7 +111,8 @@ func TestList(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
-	params := &ListTransferParams{PerPage: 10, Page: 1}
+	perPage, page := 10, 1
+	params := &ListTransferParams{PerPage: &perPage, Page: &page}
 	resp, err := client.List(context.Background(), params)
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)

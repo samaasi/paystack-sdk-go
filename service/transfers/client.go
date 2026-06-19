@@ -10,6 +10,7 @@ import (
 // Service represents the interface for transfers operations.
 type Service interface {
 	Initiate(ctx context.Context, req *InitiateRequest) (*InitiateResponse, error)
+	BulkTransfer(ctx context.Context, req *BulkTransferRequest) (*BulkTransferResponse, error)
 	Finalize(ctx context.Context, req *FinalizeRequest) (*FinalizeResponse, error)
 	List(ctx context.Context, params *ListTransferParams) (*ListTransferResponse, error)
 	Fetch(ctx context.Context, idOrCode string) (*FetchResponse, error)
@@ -28,6 +29,16 @@ func NewClient(backend *backend.Client) *Client {
 func (c *Client) Initiate(ctx context.Context, req *InitiateRequest) (*InitiateResponse, error) {
 	resp := &InitiateResponse{}
 	err := c.backend.Call(ctx, "POST", "/transfer", req, resp)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+// BulkTransfer initiates multiple transfers in a single request.
+func (c *Client) BulkTransfer(ctx context.Context, req *BulkTransferRequest) (*BulkTransferResponse, error) {
+	resp := &BulkTransferResponse{}
+	err := c.backend.Call(ctx, "POST", "/transfer/bulk", req, resp)
 	if err != nil {
 		return nil, err
 	}
