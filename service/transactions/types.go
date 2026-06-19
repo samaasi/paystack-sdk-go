@@ -118,3 +118,110 @@ type ListTransactionParams struct {
 type ListTransactionResponse struct {
 	paystackapi.Response[[]VerifyData]
 }
+
+// FetchResponse represents the response for fetching a single transaction by ID.
+type FetchResponse struct {
+	paystackapi.Response[VerifyData]
+}
+
+// ChargeAuthorizationRequest represents the payload for charging a saved authorization.
+type ChargeAuthorizationRequest struct {
+	Amount            string                `json:"amount"`
+	Email             string                `json:"email"`
+	AuthorizationCode string                `json:"authorization_code"`
+	Reference         string                `json:"reference,omitempty"`
+	Currency          paystackapi.Currency  `json:"currency,omitempty"`
+	Metadata          paystackapi.Metadata  `json:"metadata,omitempty"`
+	Channels          []paystackapi.Channel `json:"channels,omitempty"`
+	Subaccount        string                `json:"subaccount,omitempty"`
+	TransactionCharge int                   `json:"transaction_charge,omitempty"`
+	Bearer            paystackapi.Bearer    `json:"bearer,omitempty"`
+	Queue             bool                  `json:"queue,omitempty"`
+}
+
+// ChargeAuthorizationResponse represents the response for charging a saved authorization.
+type ChargeAuthorizationResponse struct {
+	paystackapi.Response[VerifyData]
+}
+
+// TimelineData represents the transaction timeline.
+type TimelineData struct {
+	TimeSpent      int           `json:"time_spent"`
+	Attempts       int           `json:"attempts"`
+	Authentication string        `json:"authentication"`
+	Errors         int           `json:"errors"`
+	Success        bool          `json:"success"`
+	Mobile         bool          `json:"mobile"`
+	Input          []interface{} `json:"input"`
+	Channel        string        `json:"channel"`
+	History        []History     `json:"history"`
+}
+
+// TimelineResponse represents the response for fetching a transaction timeline.
+type TimelineResponse struct {
+	paystackapi.Response[TimelineData]
+}
+
+// TotalsParams represents optional date-range filters for transaction totals.
+type TotalsParams struct {
+	From string `query:"from,omitempty"`
+	To   string `query:"to,omitempty"`
+}
+
+// CurrencyTotal represents total amounts grouped by currency.
+type CurrencyTotal struct {
+	Currency string `json:"currency"`
+	Amount   int    `json:"amount"`
+}
+
+// TotalsData represents the aggregated transaction totals for the account.
+type TotalsData struct {
+	TotalTransactions          int             `json:"total_transactions"`
+	TotalVolume                int             `json:"total_volume"`
+	TotalVolumeByCurrency      []CurrencyTotal `json:"total_volume_by_currency"`
+	PendingTransfers           int             `json:"pending_transfers"`
+	PendingTransfersByCurrency []CurrencyTotal `json:"pending_transfers_by_currency"`
+}
+
+// TotalsResponse represents the response for transaction totals.
+type TotalsResponse struct {
+	paystackapi.Response[TotalsData]
+}
+
+// ExportParams represents optional query parameters for exporting transactions.
+type ExportParams struct {
+	From        string `query:"from,omitempty"`
+	To          string `query:"to,omitempty"`
+	Customer    *int   `query:"customer,omitempty"`
+	Status      string `query:"status,omitempty"`
+	Currency    string `query:"currency,omitempty"`
+	Amount      *int   `query:"amount,omitempty"`
+	Settled     *bool  `query:"settled,omitempty"`
+	Settlement  *int   `query:"settlement,omitempty"`
+	PaymentPage *int   `query:"payment_page,omitempty"`
+}
+
+// ExportData holds the path to the exported transactions file.
+type ExportData struct {
+	Path string `json:"path"`
+}
+
+// ExportResponse represents the response for exporting transactions.
+type ExportResponse struct {
+	paystackapi.Response[ExportData]
+}
+
+// PartialDebitRequest represents the payload for a partial debit.
+type PartialDebitRequest struct {
+	AuthorizationCode string               `json:"authorization_code"`
+	Currency          paystackapi.Currency `json:"currency"`
+	Amount            string               `json:"amount"`
+	Email             string               `json:"email"`
+	Reference         string               `json:"reference,omitempty"`
+	AtLeast           string               `json:"at_least,omitempty"`
+}
+
+// PartialDebitResponse represents the response for a partial debit.
+type PartialDebitResponse struct {
+	paystackapi.Response[VerifyData]
+}
