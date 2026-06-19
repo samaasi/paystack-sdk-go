@@ -68,6 +68,58 @@ func TestResendOTP(t *testing.T) {
 	}
 }
 
+func TestDisableOTP(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("Expected POST request, got %s", r.Method)
+		}
+		if r.URL.Path != "/transfer/disable_otp" {
+			t.Errorf("Expected /transfer/disable_otp, got %s", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"status":  true,
+			"message": "OTP has been sent to mobile number ending with 4321",
+		})
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(ts.URL)))
+	resp, err := client.DisableOTP(context.Background())
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if !resp.Status {
+		t.Errorf("Expected status true, got %v", resp.Status)
+	}
+}
+
+func TestFinalizeDisableOTP(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("Expected POST request, got %s", r.Method)
+		}
+		if r.URL.Path != "/transfer/disable_otp_finalize" {
+			t.Errorf("Expected /transfer/disable_otp_finalize, got %s", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"status":  true,
+			"message": "OTP authentication has been deactivated",
+		})
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(ts.URL)))
+	resp, err := client.FinalizeDisableOTP(context.Background(), &FinalizeDisableOTPRequest{OTP: "928783"})
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if !resp.Status {
+		t.Errorf("Expected status true, got %v", resp.Status)
+	}
+}
+
 func TestEnableOTP(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
