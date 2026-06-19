@@ -15,6 +15,7 @@ type Service interface {
 	Fetch(ctx context.Context, idOrCode string) (*SubscriptionResponse, error)
 	Enable(ctx context.Context, req *EnableDisableSubscriptionRequest) (*paystackapi.Response[interface{}], error)
 	Disable(ctx context.Context, req *EnableDisableSubscriptionRequest) (*paystackapi.Response[interface{}], error)
+	GenerateLink(ctx context.Context, idOrCode string) (*GenerateLinkResponse, error)
 }
 
 type Client struct {
@@ -66,6 +67,16 @@ func (c *Client) Enable(ctx context.Context, req *EnableDisableSubscriptionReque
 func (c *Client) Disable(ctx context.Context, req *EnableDisableSubscriptionRequest) (*paystackapi.Response[interface{}], error) {
 	resp := &paystackapi.Response[interface{}]{}
 	err := c.backend.Call(ctx, "POST", "/subscription/disable", req, resp)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+// GenerateLink generates a link for managing a subscription on the Paystack hosted page.
+func (c *Client) GenerateLink(ctx context.Context, idOrCode string) (*GenerateLinkResponse, error) {
+	resp := &GenerateLinkResponse{}
+	err := c.backend.Call(ctx, "GET", fmt.Sprintf("/subscription/%s/manage/link", idOrCode), nil, resp)
 	if err != nil {
 		return nil, err
 	}

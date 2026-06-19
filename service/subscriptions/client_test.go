@@ -82,6 +82,56 @@ func TestFetchSubscription(t *testing.T) {
 	}
 }
 
+func TestDisableSubscription(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("Expected POST request, got %s", r.Method)
+		}
+		if r.URL.Path != "/subscription/disable" {
+			t.Errorf("Expected path /subscription/disable, got %s", r.URL.Path)
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":true,"message":"Subscription disabled"}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
+	req := &EnableDisableSubscriptionRequest{
+		Code:  "SUB_123",
+		Token: "token_123",
+	}
+	resp, err := client.Disable(context.Background(), req)
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if !resp.Status {
+		t.Errorf("Expected status true, got false")
+	}
+}
+
+func TestGenerateLink(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			t.Errorf("Expected GET request, got %s", r.Method)
+		}
+		if r.URL.Path != "/subscription/SUB_123/manage/link" {
+			t.Errorf("Expected path /subscription/SUB_123/manage/link, got %s", r.URL.Path)
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":true,"message":"Link generated","data":{"link":"https://paystack.com/manage/SUB_123"}}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
+	resp, err := client.GenerateLink(context.Background(), "SUB_123")
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if resp.Data.Link == "" {
+		t.Errorf("Expected a non-empty management link")
+	}
+}
+
 func TestEnableSubscription(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
