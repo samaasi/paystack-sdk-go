@@ -24,7 +24,8 @@ func TestList(t *testing.T) {
 
 	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(server.URL)))
 
-	resp, err := client.List(context.Background(), &ListDisputesParams{PerPage: 10})
+	perPage := 10
+	resp, err := client.List(context.Background(), &ListDisputesParams{PerPage: &perPage})
 	if err != nil {
 		t.Fatalf("List failed: %v", err)
 	}

@@ -114,10 +114,11 @@ func TestMiscServiceIntegration(t *testing.T) {
 	client := paystack.NewClient("secret_key", paystack.WithBaseURL(ts.URL))
 
 	// Call Misc service
+	country, perPage, page := "Nigeria", 10, 1
 	resp, err := client.Misc.ListBanks(context.Background(), &misc.ListBanksParams{
-		Country: "Nigeria",
-		PerPage: 10,
-		Page:    1,
+		Country: &country,
+		PerPage: &perPage,
+		Page:    &page,
 	})
 	if err != nil {
 		t.Fatalf("Error: %v", err)

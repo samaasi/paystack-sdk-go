@@ -56,7 +56,8 @@ func TestList(t *testing.T) {
 
 	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(server.URL)))
 
-	resp, err := client.List(context.Background(), &ListBulkChargesParams{PerPage: 10})
+	perPage := 10
+	resp, err := client.List(context.Background(), &ListBulkChargesParams{PerPage: &perPage})
 	if err != nil {
 		t.Fatalf("List failed: %v", err)
 	}
@@ -93,6 +94,52 @@ func TestFetch(t *testing.T) {
 	}
 	if resp.Data.BatchCode != "BCH_123456" {
 		t.Errorf("Expected batch code BCH_123456, got %s", resp.Data.BatchCode)
+	}
+}
+
+func TestPause(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("Expected method POST, got %s", r.Method)
+		}
+		if r.URL.Path != "/bulkcharge/pause/BCH_123456" {
+			t.Errorf("Expected path /bulkcharge/pause/BCH_123456, got %s", r.URL.Path)
+		}
+		fmt.Fprint(w, `{"status": true, "message": "Bulk charge batch paused"}`)
+	}))
+	defer server.Close()
+
+	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(server.URL)))
+
+	resp, err := client.Pause(context.Background(), "BCH_123456")
+	if err != nil {
+		t.Fatalf("Pause failed: %v", err)
+	}
+	if !resp.Status {
+		t.Errorf("Expected status true, got false")
+	}
+}
+
+func TestResume(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("Expected method POST, got %s", r.Method)
+		}
+		if r.URL.Path != "/bulkcharge/resume/BCH_123456" {
+			t.Errorf("Expected path /bulkcharge/resume/BCH_123456, got %s", r.URL.Path)
+		}
+		fmt.Fprint(w, `{"status": true, "message": "Bulk charge batch resumed"}`)
+	}))
+	defer server.Close()
+
+	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(server.URL)))
+
+	resp, err := client.Resume(context.Background(), "BCH_123456")
+	if err != nil {
+		t.Fatalf("Resume failed: %v", err)
+	}
+	if !resp.Status {
+		t.Errorf("Expected status true, got false")
 	}
 }
 

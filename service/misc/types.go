@@ -24,9 +24,9 @@ type ListBanksResponse struct {
 }
 
 type ListBanksParams struct {
-	Country string `query:"country"`
-	PerPage int    `query:"perPage"`
-	Page    int    `query:"page"`
+	Country *string `query:"country,omitempty"`
+	PerPage *int    `query:"perPage,omitempty"`
+	Page    *int    `query:"page,omitempty"`
 }
 
 type Country struct {
