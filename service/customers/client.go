@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
+	"github.com/samaasi/paystack-sdk-go/paystackapi"
 )
 
 // Client is the client for the Customers service
@@ -98,7 +99,7 @@ func (c *Client) Validate(ctx context.Context, code string, req *ValidateCustome
 func (c *Client) Whitelist(ctx context.Context, customerCode string) (*CustomerResponse, error) {
 	req := &SetRiskActionRequest{
 		Customer:   customerCode,
-		RiskAction: "allow",
+		RiskAction: paystackapi.RiskActionAllow,
 	}
 	resp := &CustomerResponse{}
 	err := c.backend.Call(ctx, "POST", "/customer/set_risk_action", req, resp)
@@ -112,7 +113,7 @@ func (c *Client) Whitelist(ctx context.Context, customerCode string) (*CustomerR
 func (c *Client) Blacklist(ctx context.Context, customerCode string) (*CustomerResponse, error) {
 	req := &SetRiskActionRequest{
 		Customer:   customerCode,
-		RiskAction: "deny",
+		RiskAction: paystackapi.RiskActionDeny,
 	}
 	resp := &CustomerResponse{}
 	err := c.backend.Call(ctx, "POST", "/customer/set_risk_action", req, resp)
