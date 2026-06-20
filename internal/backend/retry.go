@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 )
 
 // Backoff handles retry logic with exponential backoff

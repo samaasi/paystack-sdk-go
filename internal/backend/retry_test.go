@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 )
 
 func TestRetry_SuccessOnFirstAttempt(t *testing.T) {

@@ -3,7 +3,7 @@ package integration
 import (
 	"context"
 
-	"github.com/samaasi/paystack-sdk-go/internal/backend"
+	"github.com/samaasi/paystack-sdk-go/v2/internal/backend"
 )
 
 // Client is the client for the Integration service

@@ -1,6 +1,6 @@
 package applepay
 
-import "github.com/samaasi/paystack-sdk-go/paystackapi"
+import "github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 
 // RegisterDomainRequest represents the payload for registering a domain
 type RegisterDomainRequest struct {

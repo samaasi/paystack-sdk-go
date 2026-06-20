@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	paystack "github.com/samaasi/paystack-sdk-go"
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
-	"github.com/samaasi/paystack-sdk-go/service/misc"
+	paystack "github.com/samaasi/paystack-sdk-go/v2"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/service/misc"
 )
 
 func TestConfiguration(t *testing.T) {

@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/samaasi/paystack-sdk-go/internal/backend"
+	"github.com/samaasi/paystack-sdk-go/v2/internal/backend"
 )
 
 func TestCreatePlan(t *testing.T) {
@@ -88,6 +88,26 @@ func TestFetchPlan(t *testing.T) {
 	}
 	if resp.Data.PlanCode != "PLN_123" {
 		t.Errorf("Expected plan code PLN_123, got %s", resp.Data.PlanCode)
+	}
+}
+
+func TestListPlans_WithParams(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Query().Get("interval") != "monthly" {
+			t.Errorf("expected interval=monthly in query, got %s", r.URL.RawQuery)
+		}
+		fmt.Fprint(w, `{"status": true, "message": "Plans retrieved", "data": [{"plan_code": "PLN_123"}]}`)
+	}))
+	defer server.Close()
+
+	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(server.URL)))
+	interval := "monthly"
+	resp, err := client.List(context.Background(), &ListPlansParams{Interval: &interval})
+	if err != nil {
+		t.Fatalf("List failed: %v", err)
+	}
+	if len(resp.Data) != 1 {
+		t.Errorf("Expected 1 plan, got %d", len(resp.Data))
 	}
 }
 

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 )
 
 func makeResp(statusCode int, body string, headers map[string]string) *http.Response {

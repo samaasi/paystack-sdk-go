@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/samaasi/paystack-sdk-go/internal/backend"
+	"github.com/samaasi/paystack-sdk-go/v2/internal/backend"
 )
 
 func TestCreateRefund(t *testing.T) {
@@ -61,6 +61,26 @@ func TestListRefunds(t *testing.T) {
 	}
 	if len(resp.Data) != 1 {
 		t.Errorf("Expected 1 refund, got %d", len(resp.Data))
+	}
+}
+
+func TestListRefunds_WithParams(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Query().Get("perPage") != "5" {
+			t.Errorf("expected perPage=5 in query, got %s", r.URL.RawQuery)
+		}
+		fmt.Fprint(w, `{"status": true, "message": "Refunds retrieved", "data": [{"id": 1}, {"id": 2}]}`)
+	}))
+	defer server.Close()
+
+	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(server.URL)))
+	perPage := 5
+	resp, err := client.List(context.Background(), &ListRefundsParams{PerPage: &perPage})
+	if err != nil {
+		t.Fatalf("List failed: %v", err)
+	}
+	if len(resp.Data) != 2 {
+		t.Errorf("Expected 2 refunds, got %d", len(resp.Data))
 	}
 }
 

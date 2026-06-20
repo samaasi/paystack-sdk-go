@@ -1,6 +1,6 @@
 package transferControl
 
-import "github.com/samaasi/paystack-sdk-go/paystackapi"
+import "github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 
 type Balance struct {
 	Currency string `json:"currency"`

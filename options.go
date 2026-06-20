@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/samaasi/paystack-sdk-go/internal/backend"
+	"github.com/samaasi/paystack-sdk-go/v2/internal/backend"
 )
 
 // ClientOption is a function that configures the Client.

@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/samaasi/paystack-sdk-go/internal/backend"
+	"github.com/samaasi/paystack-sdk-go/v2/internal/backend"
 )
 
 func TestList(t *testing.T) {
@@ -192,6 +192,26 @@ func TestResolve(t *testing.T) {
 		t.Fatalf("Resolve failed: %v", err)
 	}
 
+	if !resp.Status {
+		t.Errorf("Expected status true, got false")
+	}
+}
+
+func TestExport_WithParams(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Query().Get("perPage") != "20" {
+			t.Errorf("expected perPage=20 in query, got %s", r.URL.RawQuery)
+		}
+		fmt.Fprint(w, `{"status": true, "message": "Disputes exported", "data": {"path": "http://example.com/export"}}`)
+	}))
+	defer server.Close()
+
+	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(server.URL)))
+	perPage := 20
+	resp, err := client.Export(context.Background(), &ListDisputesParams{PerPage: &perPage})
+	if err != nil {
+		t.Fatalf("Export failed: %v", err)
+	}
 	if !resp.Status {
 		t.Errorf("Expected status true, got false")
 	}

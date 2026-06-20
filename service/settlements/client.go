@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/samaasi/paystack-sdk-go/internal/backend"
+	"github.com/samaasi/paystack-sdk-go/v2/internal/backend"
 )
 
 // Client is the client for the Settlements service

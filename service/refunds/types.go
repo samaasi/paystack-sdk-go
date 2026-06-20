@@ -1,7 +1,7 @@
 package refunds
 
 import (
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 )
 
 // Refund represents a refund

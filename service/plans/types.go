@@ -3,7 +3,7 @@ package plans
 import (
 	"encoding/json"
 
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 )
 
 // Plan represents a payment plan

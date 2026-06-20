@@ -3,7 +3,7 @@ package virtualAccounts
 import (
 	"encoding/json"
 
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 )
 
 // CreateVirtualAccountRequest represents the request to create a dedicated virtual account

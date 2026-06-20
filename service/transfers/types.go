@@ -1,6 +1,6 @@
 package transfers
 
-import "github.com/samaasi/paystack-sdk-go/paystackapi"
+import "github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 
 // InitiateRequest represents the payload for initiating a transfer
 type InitiateRequest struct {

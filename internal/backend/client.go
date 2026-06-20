@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 )
 
 const DefaultBaseURL = "https://api.paystack.co"
