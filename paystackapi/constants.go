@@ -9,6 +9,9 @@ const (
 	CurrencyZAR Currency = "ZAR"
 	CurrencyUSD Currency = "USD"
 	CurrencyKES Currency = "KES"
+	CurrencyEGP Currency = "EGP"
+	CurrencyXOF Currency = "XOF"
+	CurrencyETB Currency = "ETB"
 )
 
 // Channel represents a strongly typed payment channel.

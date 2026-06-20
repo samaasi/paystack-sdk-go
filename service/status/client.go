@@ -16,7 +16,6 @@ const DefaultStatusURL = "https://status.paystack.com/api/v2/summary.json"
 
 // Service represents the interface for status operations.
 type Service interface {
-	WithURL(url string) *Client
 	Fetch(ctx context.Context) (*Summary, error)
 }
 

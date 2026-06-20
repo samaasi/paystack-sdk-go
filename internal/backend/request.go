@@ -111,6 +111,18 @@ func EncodeQueryParams(v interface{}) (string, error) {
 			values.Add(tagName, strconv.FormatFloat(value.Float(), 'f', -1, 64))
 		case reflect.Bool:
 			values.Add(tagName, strconv.FormatBool(value.Bool()))
+		case reflect.Slice:
+			for j := 0; j < value.Len(); j++ {
+				elem := value.Index(j)
+				switch elem.Kind() {
+				case reflect.String:
+					values.Add(tagName, elem.String())
+				case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+					values.Add(tagName, strconv.FormatInt(elem.Int(), 10))
+				case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+					values.Add(tagName, strconv.FormatUint(elem.Uint(), 10))
+				}
+			}
 		}
 	}
 

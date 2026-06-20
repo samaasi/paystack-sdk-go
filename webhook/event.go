@@ -33,6 +33,8 @@ const (
 	EventTransferReversed              = "transfer.reversed"
 	EventDedicatedAccountAssignSuccess = "dedicatedaccount.assign.success"
 	EventDedicatedAccountAssignFailed  = "dedicatedaccount.assign.failed"
+	EventTerminalActionSuccess         = "terminal.action.success"
+	EventTerminalActionFailed          = "terminal.action.failed"
 )
 
 // Event represents a Paystack webhook event
@@ -82,11 +84,11 @@ type ChargeSuccessEvent struct {
 	Currency        string               `json:"currency"`
 	IPAddress       string               `json:"ip_address"`
 	Metadata        paystackapi.Metadata `json:"metadata,omitempty"`
-	Log             interface{}          `json:"log,omitempty"`
+	Log             json.RawMessage      `json:"log,omitempty"`
 	Fees            int                  `json:"fees,omitempty"`
 	Customer        Customer             `json:"customer"`
 	Authorization   Authorization        `json:"authorization"`
-	Plan            interface{}          `json:"plan,omitempty"`
+	Plan            json.RawMessage      `json:"plan,omitempty"`
 }
 
 type Customer struct {
@@ -117,24 +119,24 @@ type Authorization struct {
 
 // TransferSuccessEvent represents the data for a transfer.success event
 type TransferSuccessEvent struct {
-	Amount        int         `json:"amount"`
-	Currency      string      `json:"currency"`
-	Domain        string      `json:"domain"`
-	Failures      interface{} `json:"failures"`
-	ID            int         `json:"id"`
-	Integration   Integration `json:"integration"`
-	Reason        string      `json:"reason"`
-	Reference     string      `json:"reference"`
-	Source        string      `json:"source"`
-	SourceDetails interface{} `json:"source_details"`
-	Status        string      `json:"status"`
-	TitanCode     interface{} `json:"titan_code"`
-	TransferCode  string      `json:"transfer_code"`
-	TransferredAt string      `json:"transferred_at"`
-	Recipient     Recipient   `json:"recipient"`
-	Session       interface{} `json:"session"`
-	CreatedAt     string      `json:"created_at"`
-	UpdatedAt     string      `json:"updated_at"`
+	Amount        int             `json:"amount"`
+	Currency      string          `json:"currency"`
+	Domain        string          `json:"domain"`
+	Failures      json.RawMessage `json:"failures"`
+	ID            int             `json:"id"`
+	Integration   Integration     `json:"integration"`
+	Reason        string          `json:"reason"`
+	Reference     string          `json:"reference"`
+	Source        string          `json:"source"`
+	SourceDetails json.RawMessage `json:"source_details"`
+	Status        string          `json:"status"`
+	TitanCode     json.RawMessage `json:"titan_code"`
+	TransferCode  string          `json:"transfer_code"`
+	TransferredAt string          `json:"transferred_at"`
+	Recipient     Recipient       `json:"recipient"`
+	Session       json.RawMessage `json:"session"`
+	CreatedAt     string          `json:"created_at"`
+	UpdatedAt     string          `json:"updated_at"`
 }
 
 type Integration struct {
@@ -148,7 +150,7 @@ type Recipient struct {
 	Currency      string               `json:"currency"`
 	Description   string               `json:"description"`
 	Domain        string               `json:"domain"`
-	Email         interface{}          `json:"email"`
+	Email         *string              `json:"email"`
 	ID            int                  `json:"id"`
 	Integration   int                  `json:"integration"`
 	Metadata      paystackapi.Metadata `json:"metadata"`
@@ -162,10 +164,10 @@ type Recipient struct {
 }
 
 type BankDetails struct {
-	AccountNumber string      `json:"account_number"`
-	AccountName   interface{} `json:"account_name"`
-	BankCode      string      `json:"bank_code"`
-	BankName      string      `json:"bank_name"`
+	AccountNumber string  `json:"account_number"`
+	AccountName   *string `json:"account_name"`
+	BankCode      string  `json:"bank_code"`
+	BankName      string  `json:"bank_name"`
 }
 
 // TransferFailedEvent represents the data for a transfer.failed event
@@ -208,22 +210,22 @@ type InvoiceEvent struct {
 
 // SubscriptionEvent represents the data for subscription.* events
 type SubscriptionEvent struct {
-	ID               int           `json:"id"`
-	Domain           string        `json:"domain"`
-	Amount           int           `json:"amount"`
-	PeriodStart      string        `json:"period_start"`
-	PeriodEnd        string        `json:"period_end"`
-	Status           string        `json:"status"`
-	SubscriptionCode string        `json:"subscription_code"`
-	EmailToken       string        `json:"email_token"`
-	EasyTransact     interface{}   `json:"easy_transact"`
-	CronExpression   string        `json:"cron_expression"`
-	NextPaymentDate  string        `json:"next_payment_date"`
-	OpenInvoice      interface{}   `json:"open_invoice"`
-	CreatedAt        string        `json:"created_at"`
-	Plan             interface{}   `json:"plan"`
-	Authorization    Authorization `json:"authorization"`
-	Customer         Customer      `json:"customer"`
+	ID               int             `json:"id"`
+	Domain           string          `json:"domain"`
+	Amount           int             `json:"amount"`
+	PeriodStart      string          `json:"period_start"`
+	PeriodEnd        string          `json:"period_end"`
+	Status           string          `json:"status"`
+	SubscriptionCode string          `json:"subscription_code"`
+	EmailToken       string          `json:"email_token"`
+	EasyTransact     json.RawMessage `json:"easy_transact"`
+	CronExpression   string          `json:"cron_expression"`
+	NextPaymentDate  string          `json:"next_payment_date"`
+	OpenInvoice      json.RawMessage `json:"open_invoice"`
+	CreatedAt        string          `json:"created_at"`
+	Plan             json.RawMessage `json:"plan"`
+	Authorization    Authorization   `json:"authorization"`
+	Customer         Customer        `json:"customer"`
 }
 
 // PaymentRequestEvent represents the data for paymentrequest.* events
@@ -237,14 +239,14 @@ type PaymentRequestEvent struct {
 	InvoiceNumber    string               `json:"invoice_number"`
 	Description      string               `json:"description"`
 	PDFUrl           string               `json:"pdf_url"`
-	LineItems        interface{}          `json:"line_items"`
-	Tax              interface{}          `json:"tax"`
+	LineItems        json.RawMessage      `json:"line_items"`
+	Tax              json.RawMessage      `json:"tax"`
 	RequestCode      string               `json:"request_code"`
 	Status           string               `json:"status"`
 	Paid             bool                 `json:"paid"`
 	PaidAt           string               `json:"paid_at"`
 	Metadata         paystackapi.Metadata `json:"metadata"`
-	Notifications    interface{}          `json:"notifications"`
+	Notifications    json.RawMessage      `json:"notifications"`
 	OfflineReference string               `json:"offline_reference"`
 	Customer         Customer             `json:"customer"`
 	CreatedAt        string               `json:"created_at"`
@@ -281,8 +283,8 @@ type DedicatedAccountEvent struct {
 
 // CustomerIdentificationEvent represents the data for customeridentification.* events
 type CustomerIdentificationEvent struct {
-	CustomerCode   string      `json:"customer_code"`
-	Email          string      `json:"email"`
-	Identification interface{} `json:"identification"`
-	Reason         string      `json:"reason"`
+	CustomerCode   string          `json:"customer_code"`
+	Email          string          `json:"email"`
+	Identification json.RawMessage `json:"identification"`
+	Reason         string          `json:"reason"`
 }
