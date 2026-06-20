@@ -120,6 +120,50 @@ func TestFinalizeDisableOTP(t *testing.T) {
 	}
 }
 
+func TestFetchLedger(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			t.Errorf("Expected GET request, got %s", r.Method)
+		}
+		if r.URL.Path != "/balance/ledger" {
+			t.Errorf("Expected /balance/ledger, got %s", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"status":  true,
+			"message": "Ledger retrieved",
+			"data": []map[string]interface{}{
+				{
+					"integration": 100,
+					"domain":      "live",
+					"balance":     500000,
+					"currency":    "NGN",
+					"difference":  -10000,
+					"reason":      "Transfer",
+					"model":       "transfer",
+				},
+			},
+		})
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(ts.URL)))
+	perPage := 10
+	resp, err := client.FetchLedger(context.Background(), &LedgerParams{PerPage: &perPage})
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if !resp.Status {
+		t.Errorf("Expected status true, got %v", resp.Status)
+	}
+	if len(resp.Data) != 1 {
+		t.Errorf("Expected 1 ledger entry, got %d", len(resp.Data))
+	}
+	if resp.Data[0].Currency != "NGN" {
+		t.Errorf("Expected currency NGN, got %s", resp.Data[0].Currency)
+	}
+}
+
 func TestEnableOTP(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
