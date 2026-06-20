@@ -12,8 +12,6 @@ type Service interface {
 	ListBanks(ctx context.Context, params *ListBanksParams) (*ListBanksResponse, error)
 	ListCountries(ctx context.Context) (*ListCountriesResponse, error)
 	ListStates(ctx context.Context, country string) (*ListStatesResponse, error)
-	ResolveCardBIN(ctx context.Context, bin string) (*ResolveCardBINResponse, error)
-	ResolveAccount(ctx context.Context, accountNumber, bankCode string) (*ResolveAccountResponse, error)
 }
 
 type Client struct {
@@ -56,26 +54,6 @@ func (c *Client) ListCountries(ctx context.Context) (*ListCountriesResponse, err
 func (c *Client) ListStates(ctx context.Context, country string) (*ListStatesResponse, error) {
 	path := fmt.Sprintf("/address_verification/states?country=%s", country)
 	resp := &ListStatesResponse{}
-	err := c.backend.Call(ctx, "GET", path, nil, resp)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
-}
-
-func (c *Client) ResolveCardBIN(ctx context.Context, bin string) (*ResolveCardBINResponse, error) {
-	path := fmt.Sprintf("/decision/bin/%s", bin)
-	resp := &ResolveCardBINResponse{}
-	err := c.backend.Call(ctx, "GET", path, nil, resp)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
-}
-
-func (c *Client) ResolveAccount(ctx context.Context, accountNumber, bankCode string) (*ResolveAccountResponse, error) {
-	path := fmt.Sprintf("/bank/resolve?account_number=%s&bank_code=%s", accountNumber, bankCode)
-	resp := &ResolveAccountResponse{}
 	err := c.backend.Call(ctx, "GET", path, nil, resp)
 	if err != nil {
 		return nil, err

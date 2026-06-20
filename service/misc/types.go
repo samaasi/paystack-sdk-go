@@ -30,12 +30,12 @@ type ListBanksParams struct {
 }
 
 type Country struct {
-	ID                  int         `json:"id"`
-	Name                string      `json:"name"`
-	ISOCode             string      `json:"iso_code"`
-	DefaultCurrencyCode string      `json:"default_currency_code"`
-	IntegrationDefaults interface{} `json:"integration_defaults"`
-	Relationships       interface{} `json:"relationships"`
+	ID                  int             `json:"id"`
+	Name                string          `json:"name"`
+	ISOCode             string          `json:"iso_code"`
+	DefaultCurrencyCode string          `json:"default_currency_code"`
+	IntegrationDefaults interface{}     `json:"integration_defaults"`
+	Relationships       interface{}     `json:"relationships"`
 }
 
 type ListCountriesResponse struct {
@@ -50,29 +50,4 @@ type State struct {
 
 type ListStatesResponse struct {
 	paystackapi.Response[[]State]
-}
-
-type CardBIN struct {
-	Bin          string `json:"bin"`
-	Brand        string `json:"brand"`
-	SubBrand     string `json:"sub_brand"`
-	Type         string `json:"type"`
-	CountryCode  string `json:"country_code"`
-	CountryName  string `json:"country_name"`
-	Bank         string `json:"bank"`
-	LinkedBankID int    `json:"linked_bank_id"`
-}
-
-type ResolveCardBINResponse struct {
-	paystackapi.Response[CardBIN]
-}
-
-type AccountResolve struct {
-	AccountNumber string `json:"account_number"`
-	AccountName   string `json:"account_name"`
-	BankID        int    `json:"bank_id"`
-}
-
-type ResolveAccountResponse struct {
-	paystackapi.Response[AccountResolve]
 }
