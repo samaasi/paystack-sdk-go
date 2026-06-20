@@ -13,6 +13,7 @@ type Service interface {
 	List(ctx context.Context, req *ListVirtualAccountsRequest) (*ListVirtualAccountsResponse, error)
 	Fetch(ctx context.Context, id int) (*VirtualAccountResponse, error)
 	Deactivate(ctx context.Context, id int) (*VirtualAccountResponse, error)
+	FetchBanks(ctx context.Context) (*FetchBanksResponse, error)
 	SplitTransaction(ctx context.Context, req *SplitTransactionRequest) (*VirtualAccountResponse, error)
 	RemoveSplit(ctx context.Context, req *RemoveSplitRequest) (*VirtualAccountResponse, error)
 }
@@ -68,7 +69,17 @@ func (c *Client) Fetch(ctx context.Context, id int) (*VirtualAccountResponse, er
 // Deactivate deactivates a dedicated virtual account
 func (c *Client) Deactivate(ctx context.Context, id int) (*VirtualAccountResponse, error) {
 	resp := &VirtualAccountResponse{}
-	err := c.backend.Call(ctx, "POST", fmt.Sprintf("/dedicated_account/%d", id), nil, resp)
+	err := c.backend.Call(ctx, "DELETE", fmt.Sprintf("/dedicated_account/%d", id), nil, resp)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+// FetchBanks returns the list of banks that support dedicated virtual accounts
+func (c *Client) FetchBanks(ctx context.Context) (*FetchBanksResponse, error) {
+	resp := &FetchBanksResponse{}
+	err := c.backend.Call(ctx, "GET", "/dedicated_account/available_banks", nil, resp)
 	if err != nil {
 		return nil, err
 	}
