@@ -78,3 +78,21 @@ func TestResolveCardBIN(t *testing.T) {
 		t.Errorf("Expected brand Mastercard, got %s", resp.Data.Brand)
 	}
 }
+
+func TestResolveAccount_NotFoundError(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		w.Write([]byte(`{"status":false,"message":"Could not resolve account name. Check parameters or try again."}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
+	_, err := client.ResolveAccount(context.Background(), "0000000000", "999")
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if err.Error() == "" {
+		t.Error("expected non-empty error message")
+	}
+}
