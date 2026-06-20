@@ -1,6 +1,10 @@
 package misc
 
-import "github.com/samaasi/paystack-sdk-go/paystackapi"
+import (
+	"encoding/json"
+
+	"github.com/samaasi/paystack-sdk-go/paystackapi"
+)
 
 type Bank struct {
 	ID          int    `json:"id"`
@@ -34,8 +38,8 @@ type Country struct {
 	Name                string          `json:"name"`
 	ISOCode             string          `json:"iso_code"`
 	DefaultCurrencyCode string          `json:"default_currency_code"`
-	IntegrationDefaults interface{}     `json:"integration_defaults"`
-	Relationships       interface{}     `json:"relationships"`
+	IntegrationDefaults json.RawMessage `json:"integration_defaults"`
+	Relationships       json.RawMessage `json:"relationships"`
 }
 
 type ListCountriesResponse struct {
