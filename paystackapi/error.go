@@ -4,11 +4,12 @@ import "fmt"
 
 // APIError represents an error returned by the Paystack API
 type APIError struct {
-	Status     bool   `json:"status"`
-	Message    string `json:"message"`
-	Code       string `json:"code,omitempty"`
-	StatusCode int    `json:"-"`
-	RetryAfter int    `json:"-"`
+	Status     bool                `json:"status"`
+	Message    string              `json:"message"`
+	Code       string              `json:"code,omitempty"`
+	Errors     map[string][]string `json:"errors,omitempty"`
+	StatusCode int                 `json:"-"`
+	RetryAfter int                 `json:"-"`
 }
 
 func (e *APIError) Error() string {

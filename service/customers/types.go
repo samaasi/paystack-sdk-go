@@ -36,8 +36,8 @@ type ValidateCustomerRequest struct {
 
 // SetRiskActionRequest represents the request to whitelist or blacklist a customer
 type SetRiskActionRequest struct {
-	Customer   string `json:"customer"`
-	RiskAction string `json:"risk_action,omitempty"` // "default", "allow", "deny"
+	Customer   string                `json:"customer"`
+	RiskAction paystackapi.RiskAction `json:"risk_action,omitempty"`
 }
 
 // DeactivateAuthorizationRequest represents the request to deactivate an authorization
@@ -80,8 +80,8 @@ type CustomerData struct {
 
 // ListCustomersParams represents query parameters for listing customers
 type ListCustomersParams struct {
-	PerPage int    `json:"perPage,omitempty"`
-	Page    int    `json:"page,omitempty"`
-	From    string `json:"from,omitempty"`
-	To      string `json:"to,omitempty"`
+	PerPage *int    `query:"perPage,omitempty"`
+	Page    *int    `query:"page,omitempty"`
+	From    *string `query:"from,omitempty"`
+	To      *string `query:"to,omitempty"`
 }

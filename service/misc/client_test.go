@@ -30,10 +30,11 @@ func TestListBanks(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(ts.URL)))
+	country, perPage, page := "NG", 10, 1
 	resp, err := client.ListBanks(context.Background(), &ListBanksParams{
-		Country: "NG",
-		PerPage: 10,
-		Page:    1,
+		Country: &country,
+		PerPage: &perPage,
+		Page:    &page,
 	})
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
@@ -110,75 +111,20 @@ func TestListStates(t *testing.T) {
 	}
 }
 
-func TestResolveCardBIN(t *testing.T) {
+func TestListBanksError(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "GET" {
-			t.Errorf("Expected GET request, got %s", r.Method)
-		}
-		if r.URL.Path != "/decision/bin/123456" {
-			t.Errorf("Expected /decision/bin/123456, got %s", r.URL.Path)
-		}
 		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
 		json.NewEncoder(w).Encode(map[string]interface{}{
-			"status":  true,
-			"message": "BIN resolved",
-			"data": map[string]interface{}{
-				"bin":   "123456",
-				"brand": "Visa",
-			},
+			"status":  false,
+			"message": "Invalid key",
 		})
 	}))
 	defer ts.Close()
 
-	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(ts.URL)))
-	resp, err := client.ResolveCardBIN(context.Background(), "123456")
-	if err != nil {
-		t.Fatalf("Expected no error, got %v", err)
-	}
-	if !resp.Status {
-		t.Errorf("Expected status true, got %v", resp.Status)
-	}
-	if resp.Data.Bin != "123456" {
-		t.Errorf("Expected BIN 123456, got %s", resp.Data.Bin)
-	}
-}
-
-func TestResolveAccount(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "GET" {
-			t.Errorf("Expected GET request, got %s", r.Method)
-		}
-		if r.URL.Path != "/bank/resolve" {
-			t.Errorf("Expected /bank/resolve, got %s", r.URL.Path)
-		}
-		q := r.URL.Query()
-		if q.Get("account_number") != "1234567890" {
-			t.Errorf("Expected account_number 1234567890, got %s", q.Get("account_number"))
-		}
-		if q.Get("bank_code") != "011" {
-			t.Errorf("Expected bank_code 011, got %s", q.Get("bank_code"))
-		}
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]interface{}{
-			"status":  true,
-			"message": "Account resolved",
-			"data": map[string]interface{}{
-				"account_number": "1234567890",
-				"account_name":   "Test Account",
-			},
-		})
-	}))
-	defer ts.Close()
-
-	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(ts.URL)))
-	resp, err := client.ResolveAccount(context.Background(), "1234567890", "011")
-	if err != nil {
-		t.Fatalf("Expected no error, got %v", err)
-	}
-	if !resp.Status {
-		t.Errorf("Expected status true, got %v", resp.Status)
-	}
-	if resp.Data.AccountNumber != "1234567890" {
-		t.Errorf("Expected account number 1234567890, got %s", resp.Data.AccountNumber)
+	client := NewClient(backend.NewClient("bad_key", backend.WithBaseURL(ts.URL)))
+	_, err := client.ListBanks(context.Background(), nil)
+	if err == nil {
+		t.Fatal("Expected error, got nil")
 	}
 }

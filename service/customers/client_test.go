@@ -57,7 +57,8 @@ func TestList(t *testing.T) {
 
 	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(server.URL)))
 
-	resp, err := client.List(context.Background(), &ListCustomersParams{PerPage: 10})
+	perPage := 10
+	resp, err := client.List(context.Background(), &ListCustomersParams{PerPage: &perPage})
 	if err != nil {
 		t.Fatalf("List failed: %v", err)
 	}
@@ -158,6 +159,57 @@ func TestValidate(t *testing.T) {
 	}
 }
 
+func TestBlacklist(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("Expected method POST, got %s", r.Method)
+		}
+		if r.URL.Path != "/customer/set_risk_action" {
+			t.Errorf("Expected path /customer/set_risk_action, got %s", r.URL.Path)
+		}
+		fmt.Fprint(w, `{"status": true, "message": "Customer blacklisted", "data": {"customer_code": "CUS_123", "risk_action": "deny"}}`)
+	}))
+	defer server.Close()
+
+	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(server.URL)))
+
+	resp, err := client.Blacklist(context.Background(), "CUS_123")
+	if err != nil {
+		t.Fatalf("Blacklist failed: %v", err)
+	}
+
+	if !resp.Status {
+		t.Errorf("Expected status true, got false")
+	}
+	if resp.Data.RiskAction != "deny" {
+		t.Errorf("Expected risk action deny, got %s", resp.Data.RiskAction)
+	}
+}
+
+func TestDeactivateAuthorization(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("Expected method POST, got %s", r.Method)
+		}
+		if r.URL.Path != "/customer/deactivate_authorization" {
+			t.Errorf("Expected path /customer/deactivate_authorization, got %s", r.URL.Path)
+		}
+		fmt.Fprint(w, `{"status": true, "message": "Authorization deactivated", "data": {}}`)
+	}))
+	defer server.Close()
+
+	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(server.URL)))
+
+	resp, err := client.DeactivateAuthorization(context.Background(), "AUTH_abc123")
+	if err != nil {
+		t.Fatalf("DeactivateAuthorization failed: %v", err)
+	}
+
+	if !resp.Status {
+		t.Errorf("Expected status true, got false")
+	}
+}
+
 func TestWhitelist(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -182,5 +234,23 @@ func TestWhitelist(t *testing.T) {
 	}
 	if resp.Data.RiskAction != "allow" {
 		t.Errorf("Expected risk action allow, got %s", resp.Data.RiskAction)
+	}
+}
+
+func TestCreate_UnauthorizedError(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		fmt.Fprint(w, `{"status":false,"message":"Invalid key. Please check your API key."}`)
+	}))
+	defer server.Close()
+
+	client := NewClient(backend.NewClient("bad_key", backend.WithBaseURL(server.URL)))
+	_, err := client.Create(context.Background(), &CreateCustomerRequest{Email: "x@y.com"})
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if err.Error() == "" {
+		t.Error("expected non-empty error message")
 	}
 }

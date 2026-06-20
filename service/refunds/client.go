@@ -7,12 +7,10 @@ import (
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 )
 
-// Client is the client for the Refunds service
-
 // Service represents the interface for refunds operations.
 type Service interface {
 	Create(ctx context.Context, req *CreateRefundRequest) (*RefundResponse, error)
-	List(ctx context.Context) (*ListRefundsResponse, error)
+	List(ctx context.Context, params *ListRefundsParams) (*ListRefundsResponse, error)
 	Fetch(ctx context.Context, id string) (*RefundResponse, error)
 }
 
@@ -35,10 +33,20 @@ func (c *Client) Create(ctx context.Context, req *CreateRefundRequest) (*RefundR
 	return resp, nil
 }
 
-// List lists refunds
-func (c *Client) List(ctx context.Context) (*ListRefundsResponse, error) {
+// List lists refunds with optional filters
+func (c *Client) List(ctx context.Context, params *ListRefundsParams) (*ListRefundsResponse, error) {
+	path := "/refund"
+	if params != nil {
+		query, err := backend.EncodeQueryParams(params)
+		if err != nil {
+			return nil, err
+		}
+		if query != "" {
+			path = fmt.Sprintf("%s?%s", path, query)
+		}
+	}
 	resp := &ListRefundsResponse{}
-	err := c.backend.Call(ctx, "GET", "/refund", nil, resp)
+	err := c.backend.Call(ctx, "GET", path, nil, resp)
 	if err != nil {
 		return nil, err
 	}

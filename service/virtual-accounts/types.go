@@ -1,6 +1,10 @@
 package virtualAccounts
 
-import "github.com/samaasi/paystack-sdk-go/paystackapi"
+import (
+	"encoding/json"
+
+	"github.com/samaasi/paystack-sdk-go/paystackapi"
+)
 
 // CreateVirtualAccountRequest represents the request to create a dedicated virtual account
 type CreateVirtualAccountRequest struct {
@@ -15,19 +19,19 @@ type CreateVirtualAccountRequest struct {
 
 // VirtualAccount represents a dedicated virtual account
 type VirtualAccount struct {
-	ID            int                    `json:"id"`
-	AccountName   string                 `json:"account_name"`
-	AccountNumber string                 `json:"account_number"`
-	Assigned      bool                   `json:"assigned"`
-	Currency      string                 `json:"currency"`
-	Metadata      paystackapi.Metadata   `json:"metadata"`
-	Active        bool                   `json:"active"`
-	SplitConfig   map[string]interface{} `json:"split_config"`
-	Bank          Bank                   `json:"bank"`
-	Customer      Customer               `json:"customer"`
-	Assignment    Assignment             `json:"assignment"`
-	CreatedAt     string                 `json:"created_at"`
-	UpdatedAt     string                 `json:"updated_at"`
+	ID            int                  `json:"id"`
+	AccountName   string               `json:"account_name"`
+	AccountNumber string               `json:"account_number"`
+	Assigned      bool                 `json:"assigned"`
+	Currency      string               `json:"currency"`
+	Metadata      paystackapi.Metadata `json:"metadata"`
+	Active        bool                 `json:"active"`
+	SplitConfig   json.RawMessage      `json:"split_config"`
+	Bank          Bank                 `json:"bank"`
+	Customer      Customer             `json:"customer"`
+	Assignment    Assignment           `json:"assignment"`
+	CreatedAt     string               `json:"created_at"`
+	UpdatedAt     string               `json:"updated_at"`
 }
 
 // Bank represents bank details
@@ -64,16 +68,29 @@ type VirtualAccountResponse struct {
 
 // ListVirtualAccountsRequest represents the query parameters for listing virtual accounts
 type ListVirtualAccountsRequest struct {
-	Active       *bool  `query:"active"`
-	Currency     string `query:"currency"`
-	ProviderSlug string `query:"provider_slug"`
-	BankID       string `query:"bank_id"`
-	Customer     string `query:"customer"`
+	Active       *bool   `query:"active,omitempty"`
+	Currency     *string `query:"currency,omitempty"`
+	ProviderSlug *string `query:"provider_slug,omitempty"`
+	BankID       *string `query:"bank_id,omitempty"`
+	Customer     *string `query:"customer,omitempty"`
 }
 
 // ListVirtualAccountsResponse represents the response for listing virtual accounts
 type ListVirtualAccountsResponse struct {
 	paystackapi.Response[[]VirtualAccount]
+}
+
+// AvailableBank represents a bank that supports dedicated virtual accounts
+type AvailableBank struct {
+	Name         string `json:"name"`
+	Slug         string `json:"slug"`
+	BankID       int    `json:"bank_id"`
+	ProviderSlug string `json:"provider_slug"`
+}
+
+// FetchBanksResponse represents the response for listing available banks
+type FetchBanksResponse struct {
+	paystackapi.Response[[]AvailableBank]
 }
 
 // SplitTransactionRequest represents the request to split a transaction

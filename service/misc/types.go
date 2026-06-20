@@ -1,6 +1,10 @@
 package misc
 
-import "github.com/samaasi/paystack-sdk-go/paystackapi"
+import (
+	"encoding/json"
+
+	"github.com/samaasi/paystack-sdk-go/paystackapi"
+)
 
 type Bank struct {
 	ID          int    `json:"id"`
@@ -24,18 +28,18 @@ type ListBanksResponse struct {
 }
 
 type ListBanksParams struct {
-	Country string `query:"country"`
-	PerPage int    `query:"perPage"`
-	Page    int    `query:"page"`
+	Country *string `query:"country,omitempty"`
+	PerPage *int    `query:"perPage,omitempty"`
+	Page    *int    `query:"page,omitempty"`
 }
 
 type Country struct {
-	ID                  int         `json:"id"`
-	Name                string      `json:"name"`
-	ISOCode             string      `json:"iso_code"`
-	DefaultCurrencyCode string      `json:"default_currency_code"`
-	IntegrationDefaults interface{} `json:"integration_defaults"`
-	Relationships       interface{} `json:"relationships"`
+	ID                  int             `json:"id"`
+	Name                string          `json:"name"`
+	ISOCode             string          `json:"iso_code"`
+	DefaultCurrencyCode string          `json:"default_currency_code"`
+	IntegrationDefaults json.RawMessage `json:"integration_defaults"`
+	Relationships       json.RawMessage `json:"relationships"`
 }
 
 type ListCountriesResponse struct {
@@ -50,29 +54,4 @@ type State struct {
 
 type ListStatesResponse struct {
 	paystackapi.Response[[]State]
-}
-
-type CardBIN struct {
-	Bin          string `json:"bin"`
-	Brand        string `json:"brand"`
-	SubBrand     string `json:"sub_brand"`
-	Type         string `json:"type"`
-	CountryCode  string `json:"country_code"`
-	CountryName  string `json:"country_name"`
-	Bank         string `json:"bank"`
-	LinkedBankID int    `json:"linked_bank_id"`
-}
-
-type ResolveCardBINResponse struct {
-	paystackapi.Response[CardBIN]
-}
-
-type AccountResolve struct {
-	AccountNumber string `json:"account_number"`
-	AccountName   string `json:"account_name"`
-	BankID        int    `json:"bank_id"`
-}
-
-type ResolveAccountResponse struct {
-	paystackapi.Response[AccountResolve]
 }

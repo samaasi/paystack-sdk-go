@@ -51,7 +51,7 @@ func TestListRefunds(t *testing.T) {
 
 	client := NewClient(backend.NewClient("secret", backend.WithBaseURL(server.URL)))
 
-	resp, err := client.List(context.Background())
+	resp, err := client.List(context.Background(), nil)
 	if err != nil {
 		t.Fatalf("List failed: %v", err)
 	}

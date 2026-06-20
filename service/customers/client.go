@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
+	"github.com/samaasi/paystack-sdk-go/paystackapi"
 )
 
 // Client is the client for the Customers service
@@ -42,8 +43,19 @@ func (c *Client) Create(ctx context.Context, req *CreateCustomerRequest) (*Custo
 
 // List lists customers
 func (c *Client) List(ctx context.Context, params *ListCustomersParams) (*CustomerListResponse, error) {
+	path := "/customer"
+	if params != nil {
+		query, err := backend.EncodeQueryParams(params)
+		if err != nil {
+			return nil, err
+		}
+		if query != "" {
+			path = fmt.Sprintf("%s?%s", path, query)
+		}
+	}
+
 	resp := &CustomerListResponse{}
-	err := c.backend.Call(ctx, "GET", "/customer", params, resp)
+	err := c.backend.Call(ctx, "GET", path, nil, resp)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +99,7 @@ func (c *Client) Validate(ctx context.Context, code string, req *ValidateCustome
 func (c *Client) Whitelist(ctx context.Context, customerCode string) (*CustomerResponse, error) {
 	req := &SetRiskActionRequest{
 		Customer:   customerCode,
-		RiskAction: "allow",
+		RiskAction: paystackapi.RiskActionAllow,
 	}
 	resp := &CustomerResponse{}
 	err := c.backend.Call(ctx, "POST", "/customer/set_risk_action", req, resp)
@@ -101,7 +113,7 @@ func (c *Client) Whitelist(ctx context.Context, customerCode string) (*CustomerR
 func (c *Client) Blacklist(ctx context.Context, customerCode string) (*CustomerResponse, error) {
 	req := &SetRiskActionRequest{
 		Customer:   customerCode,
-		RiskAction: "deny",
+		RiskAction: paystackapi.RiskActionDeny,
 	}
 	resp := &CustomerResponse{}
 	err := c.backend.Call(ctx, "POST", "/customer/set_risk_action", req, resp)

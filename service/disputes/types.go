@@ -6,12 +6,12 @@ import (
 
 // ListDisputesParams represents query parameters for listing disputes
 type ListDisputesParams struct {
-	From        string `query:"from,omitempty"`
-	To          string `query:"to,omitempty"`
-	PerPage     int    `query:"perPage,omitempty"`
-	Page        int    `query:"page,omitempty"`
-	Transaction string `query:"transaction,omitempty"`
-	Status      string `query:"status,omitempty"`
+	From        *string `query:"from,omitempty"`
+	To          *string `query:"to,omitempty"`
+	PerPage     *int    `query:"perPage,omitempty"`
+	Page        *int    `query:"page,omitempty"`
+	Transaction *string `query:"transaction,omitempty"`
+	Status      *string `query:"status,omitempty"`
 }
 
 // UpdateDisputeRequest represents the request to update a dispute

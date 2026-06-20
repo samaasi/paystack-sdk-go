@@ -47,8 +47,7 @@ func TestList(t *testing.T) {
 	defer ts.Close()
 
 	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
-	req := &ListVirtualAccountsRequest{}
-	resp, err := client.List(context.Background(), req)
+	resp, err := client.List(context.Background(), &ListVirtualAccountsRequest{})
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
@@ -82,8 +81,8 @@ func TestFetch(t *testing.T) {
 
 func TestDeactivate(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "POST" {
-			t.Errorf("Expected POST request, got %s", r.Method)
+		if r.Method != "DELETE" {
+			t.Errorf("Expected DELETE request, got %s", r.Method)
 		}
 		if r.URL.Path != "/dedicated_account/1" {
 			t.Errorf("Expected path /dedicated_account/1, got %s", r.URL.Path)
@@ -100,6 +99,32 @@ func TestDeactivate(t *testing.T) {
 	}
 	if resp.Data.Active {
 		t.Errorf("Expected active false, got true")
+	}
+}
+
+func TestFetchBanks(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			t.Errorf("Expected GET request, got %s", r.Method)
+		}
+		if r.URL.Path != "/dedicated_account/available_banks" {
+			t.Errorf("Expected path /dedicated_account/available_banks, got %s", r.URL.Path)
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":true,"message":"Banks retrieved","data":[{"name":"Wema Bank","slug":"wema-bank","bank_id":20,"provider_slug":"wema-bank"}]}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
+	resp, err := client.FetchBanks(context.Background())
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if len(resp.Data) != 1 {
+		t.Errorf("Expected 1 bank, got %d", len(resp.Data))
+	}
+	if resp.Data[0].Slug != "wema-bank" {
+		t.Errorf("Expected slug wema-bank, got %s", resp.Data[0].Slug)
 	}
 }
 

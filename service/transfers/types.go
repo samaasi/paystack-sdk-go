@@ -85,15 +85,26 @@ type RecipientDetails struct {
 
 // ListTransferParams represents query parameters for listing transfers
 type ListTransferParams struct {
-	PerPage  int    `query:"perPage"`
-	Page     int    `query:"page"`
-	Customer string `query:"customer"`
-	From     string `query:"from"`
-	To       string `query:"to"`
+	PerPage  *int    `query:"perPage,omitempty"`
+	Page     *int    `query:"page,omitempty"`
+	Customer *string `query:"customer,omitempty"`
+	From     *string `query:"from,omitempty"`
+	To       *string `query:"to,omitempty"`
 }
 
 // ListTransferResponse represents the response for listing transfers
 type ListTransferResponse struct {
+	paystackapi.Response[[]InitiateData]
+}
+
+// BulkTransferRequest represents the payload for initiating multiple transfers at once.
+type BulkTransferRequest struct {
+	Currency  string           `json:"currency"`
+	Transfers []InitiateRequest `json:"transfers"`
+}
+
+// BulkTransferResponse represents the response for a bulk transfer request.
+type BulkTransferResponse struct {
 	paystackapi.Response[[]InitiateData]
 }
 

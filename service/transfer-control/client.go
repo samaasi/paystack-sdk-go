@@ -2,12 +2,15 @@ package transferControl
 
 import (
 	"context"
+	"fmt"
+
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 )
 
 // Service represents the interface for transfer-control operations.
 type Service interface {
 	CheckBalance(ctx context.Context) (*CheckBalanceResponse, error)
+	FetchLedger(ctx context.Context, params *LedgerParams) (*LedgerResponse, error)
 	ResendOTP(ctx context.Context, req *ResendOTPRequest) (*ResendOTPResponse, error)
 	DisableOTP(ctx context.Context) (*DisableOTPResponse, error)
 	FinalizeDisableOTP(ctx context.Context, req *FinalizeDisableOTPRequest) (*FinalizeDisableOTPResponse, error)
@@ -25,6 +28,26 @@ func NewClient(backend *backend.Client) *Client {
 func (c *Client) CheckBalance(ctx context.Context) (*CheckBalanceResponse, error) {
 	resp := &CheckBalanceResponse{}
 	err := c.backend.Call(ctx, "GET", "/balance", nil, resp)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+// FetchLedger returns a paginated history of balance transactions (ledger)
+func (c *Client) FetchLedger(ctx context.Context, params *LedgerParams) (*LedgerResponse, error) {
+	path := "/balance/ledger"
+	if params != nil {
+		query, err := backend.EncodeQueryParams(params)
+		if err != nil {
+			return nil, err
+		}
+		if query != "" {
+			path = fmt.Sprintf("%s?%s", path, query)
+		}
+	}
+	resp := &LedgerResponse{}
+	err := c.backend.Call(ctx, "GET", path, nil, resp)
 	if err != nil {
 		return nil, err
 	}
