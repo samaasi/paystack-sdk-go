@@ -1,7 +1,9 @@
 # Paystack SDK for Go
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/samaasi/paystack-sdk-go.svg)](https://pkg.go.dev/github.com/samaasi/paystack-sdk-go)
-[![Go Report Card](https://goreportcard.com/badge/github.com/samaasi/paystack-sdk-go)](https://goreportcard.com/report/github.com/samaasi/paystack-sdk-go)
+[![Go Reference](https://pkg.go.dev/badge/github.com/samaasi/paystack-sdk-go/v2.svg)](https://pkg.go.dev/github.com/samaasi/paystack-sdk-go/v2)
+[![Go Report Card](https://goreportcard.com/badge/github.com/samaasi/paystack-sdk-go/v2)](https://goreportcard.com/report/github.com/samaasi/paystack-sdk-go/v2)
+[![GitHub release](https://img.shields.io/github/v/release/samaasi/paystack-sdk-go)](https://github.com/samaasi/paystack-sdk-go/releases/latest)
+[![codecov](https://codecov.io/gh/samaasi/paystack-sdk-go/branch/master/graph/badge.svg)](https://codecov.io/gh/samaasi/paystack-sdk-go)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A comprehensive and robust Go SDK for the [Paystack API](https://paystack.com/docs/api/). This library provides a clean, idiomatic Go interface for integrating Paystack payments into your applications.
@@ -20,7 +22,7 @@ A comprehensive and robust Go SDK for the [Paystack API](https://paystack.com/do
 ## Installation
 
 ```bash
-go get github.com/samaasi/paystack-sdk-go
+go get github.com/samaasi/paystack-sdk-go/v2@v2.0.0
 ```
 
 ## Usage
@@ -74,8 +76,8 @@ import (
 	"log"
 	"os"
 
-	paystack "github.com/samaasi/paystack-sdk-go"
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	paystack "github.com/samaasi/paystack-sdk-go/v2"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 	"github.com/samaasi/paystack-sdk-go/service/transactions"
 )
 
@@ -119,8 +121,8 @@ import (
 	"fmt"
 	"log"
 
-	paystack "github.com/samaasi/paystack-sdk-go"
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	paystack "github.com/samaasi/paystack-sdk-go/v2"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 	"github.com/samaasi/paystack-sdk-go/service/transactions"
 )
 
@@ -240,6 +242,17 @@ ctx := paystackapi.WithCustomHeader(context.Background(), "X-Custom-Header", "Va
 - Transfers
 - Verification
 - Virtual Accounts
+
+## Examples
+
+Runnable examples are available under [`examples/`](examples/):
+
+| Example | Description |
+|---|---|
+| [`initialize_transaction/`](examples/initialize_transaction/main.go) | Initialize a transaction and redirect to the Paystack checkout URL |
+| [`verify_webhook/`](examples/verify_webhook/main.go) | IP allowlist + HMAC signature verification + event dispatch |
+| [`pagination/`](examples/pagination/main.go) | Paginate a transaction list using the generic iterator |
+| [`charge_returning_customer/`](examples/charge_returning_customer/main.go) | Charge an existing authorization with typed error handling |
 
 ## Contributing
 
