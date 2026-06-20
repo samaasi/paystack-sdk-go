@@ -303,6 +303,67 @@ func TestVerifyWithMetadata(t *testing.T) {
 	}
 }
 
+func TestList_WithParams(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Query().Get("perPage") != "5" {
+			t.Errorf("expected perPage=5 in query, got %s", r.URL.RawQuery)
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":true,"message":"Transactions retrieved","data":[{"id":1},{"id":2}]}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
+	perPage, page := 5, 1
+	resp, err := client.List(context.Background(), &ListTransactionParams{PerPage: &perPage, Page: &page})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(resp.Data) != 2 {
+		t.Errorf("expected 2 transactions, got %d", len(resp.Data))
+	}
+}
+
+func TestTotals_WithParams(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Query().Get("from") != "2024-01-01" {
+			t.Errorf("expected from=2024-01-01 in query, got %s", r.URL.RawQuery)
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":true,"message":"Transaction totals","data":{"total_transactions":5,"total_volume":25000,"total_volume_by_currency":[],"pending_transfers":0,"pending_transfers_by_currency":[]}}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
+	resp, err := client.Totals(context.Background(), &TotalsParams{From: "2024-01-01"})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if resp.Data.TotalTransactions != 5 {
+		t.Errorf("expected 5, got %d", resp.Data.TotalTransactions)
+	}
+}
+
+func TestExport_WithParams(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Query().Get("from") != "2024-01-01" {
+			t.Errorf("expected from=2024-01-01 in query, got %s", r.URL.RawQuery)
+		}
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":true,"message":"Export successful","data":{"path":"https://files.paystack.co/export.csv"}}`))
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
+	resp, err := client.Export(context.Background(), &ExportParams{From: "2024-01-01"})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if resp.Data.Path == "" {
+		t.Error("expected non-empty export path")
+	}
+}
+
 func TestInitialize_APIError(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
