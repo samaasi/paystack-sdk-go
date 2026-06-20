@@ -8,6 +8,33 @@ import (
 	"testing"
 )
 
+func TestFetch_NonOKStatus(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusServiceUnavailable)
+	}))
+	defer ts.Close()
+
+	client := NewClient(nil).WithURL(ts.URL)
+	_, err := client.Fetch(context.Background())
+	if err == nil {
+		t.Fatal("expected error for non-200 response, got nil")
+	}
+}
+
+func TestFetch_InvalidJSON(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprint(w, `not valid json`)
+	}))
+	defer ts.Close()
+
+	client := NewClient(nil).WithURL(ts.URL)
+	_, err := client.Fetch(context.Background())
+	if err == nil {
+		t.Fatal("expected error for invalid JSON, got nil")
+	}
+}
+
 func TestFetch(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
