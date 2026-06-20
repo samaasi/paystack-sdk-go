@@ -302,3 +302,78 @@ func TestVerifyWithMetadata(t *testing.T) {
 		t.Errorf("Expected cart_id 398, got %v", resp.Data.Metadata["cart_id"])
 	}
 }
+
+func TestInitialize_APIError(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"status":  false,
+			"message": "Validation failed",
+			"errors":  map[string]interface{}{"amount": []string{"is required"}},
+		})
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
+	_, err := client.Initialize(context.Background(), &InitializeRequest{Email: "a@b.com"})
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	var apiErr *paystackapi.APIError
+	if !isAPIError(err, &apiErr) {
+		t.Fatalf("expected *paystackapi.APIError, got %T: %v", err, err)
+	}
+	if apiErr.StatusCode != http.StatusBadRequest {
+		t.Errorf("expected 400, got %d", apiErr.StatusCode)
+	}
+	if len(apiErr.Errors["amount"]) == 0 {
+		t.Errorf("expected Errors[amount] populated, got %v", apiErr.Errors)
+	}
+}
+
+func TestVerify_NotFoundError(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"status":  false,
+			"message": "Transaction reference not found",
+		})
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
+	_, err := client.Verify(context.Background(), "nonexistent_ref")
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	var apiErr *paystackapi.APIError
+	if !isAPIError(err, &apiErr) {
+		t.Fatalf("expected *paystackapi.APIError, got %T", err)
+	}
+	if apiErr.StatusCode != http.StatusNotFound {
+		t.Errorf("expected 404, got %d", apiErr.StatusCode)
+	}
+}
+
+func TestInitialize_ServerError(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	defer ts.Close()
+
+	client := NewClient(backend.NewClient("sk_test_123", backend.WithBaseURL(ts.URL)))
+	_, err := client.Initialize(context.Background(), &InitializeRequest{Email: "a@b.com", Amount: "1000"})
+	if err == nil {
+		t.Fatal("expected error for 500 response")
+	}
+}
+
+func isAPIError(err error, target **paystackapi.APIError) bool {
+	apiErr, ok := err.(*paystackapi.APIError)
+	if ok {
+		*target = apiErr
+	}
+	return ok
+}

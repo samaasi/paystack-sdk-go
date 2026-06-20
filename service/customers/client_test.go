@@ -236,3 +236,21 @@ func TestWhitelist(t *testing.T) {
 		t.Errorf("Expected risk action allow, got %s", resp.Data.RiskAction)
 	}
 }
+
+func TestCreate_UnauthorizedError(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		fmt.Fprint(w, `{"status":false,"message":"Invalid key. Please check your API key."}`)
+	}))
+	defer server.Close()
+
+	client := NewClient(backend.NewClient("bad_key", backend.WithBaseURL(server.URL)))
+	_, err := client.Create(context.Background(), &CreateCustomerRequest{Email: "x@y.com"})
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if err.Error() == "" {
+		t.Error("expected non-empty error message")
+	}
+}
