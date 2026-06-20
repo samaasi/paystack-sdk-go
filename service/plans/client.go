@@ -7,12 +7,10 @@ import (
 	"github.com/samaasi/paystack-sdk-go/internal/backend"
 )
 
-// Client is the client for the Plans service
-
 // Service represents the interface for plans operations.
 type Service interface {
 	Create(ctx context.Context, req *CreatePlanRequest) (*PlanResponse, error)
-	List(ctx context.Context) (*ListPlansResponse, error)
+	List(ctx context.Context, params *ListPlansParams) (*ListPlansResponse, error)
 	Fetch(ctx context.Context, idOrCode string) (*PlanResponse, error)
 	Update(ctx context.Context, idOrCode string, req *UpdatePlanRequest) (*PlanResponse, error)
 }
@@ -36,10 +34,20 @@ func (c *Client) Create(ctx context.Context, req *CreatePlanRequest) (*PlanRespo
 	return resp, nil
 }
 
-// List lists plans
-func (c *Client) List(ctx context.Context) (*ListPlansResponse, error) {
+// List lists plans with optional filters
+func (c *Client) List(ctx context.Context, params *ListPlansParams) (*ListPlansResponse, error) {
+	path := "/plan"
+	if params != nil {
+		query, err := backend.EncodeQueryParams(params)
+		if err != nil {
+			return nil, err
+		}
+		if query != "" {
+			path = fmt.Sprintf("%s?%s", path, query)
+		}
+	}
 	resp := &ListPlansResponse{}
-	err := c.backend.Call(ctx, "GET", "/plan", nil, resp)
+	err := c.backend.Call(ctx, "GET", path, nil, resp)
 	if err != nil {
 		return nil, err
 	}

@@ -38,6 +38,16 @@ type RefundResponse struct {
 	paystackapi.Response[Refund]
 }
 
+// ListRefundsParams represents the query parameters for listing refunds
+type ListRefundsParams struct {
+	PerPage     *int    `query:"perPage,omitempty"`
+	Page        *int    `query:"page,omitempty"`
+	From        *string `query:"from,omitempty"`
+	To          *string `query:"to,omitempty"`
+	Transaction *string `query:"transaction,omitempty"`
+	Currency    *string `query:"currency,omitempty"`
+}
+
 // ListRefundsResponse represents the response for listing refunds
 type ListRefundsResponse struct {
 	paystackapi.Response[[]Refund]
