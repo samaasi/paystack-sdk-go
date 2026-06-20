@@ -1,7 +1,7 @@
 package charges
 
 import (
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 )
 
 // CreateChargeRequest represents the request to create a charge

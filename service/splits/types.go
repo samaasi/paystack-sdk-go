@@ -1,7 +1,7 @@
 package splits
 
 import (
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 )
 
 // Split represents a transaction split

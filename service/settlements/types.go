@@ -1,7 +1,7 @@
 package settlements
 
 import (
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 )
 
 // Settlement represents a settlement

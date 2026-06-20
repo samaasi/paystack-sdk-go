@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/samaasi/paystack-sdk-go/webhook"
+	"github.com/samaasi/paystack-sdk-go/v2/webhook"
 )
 
 func webhookHandler(w http.ResponseWriter, r *http.Request) {

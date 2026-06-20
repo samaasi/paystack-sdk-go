@@ -8,8 +8,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/samaasi/paystack-sdk-go/internal/backend"
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/internal/backend"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 )
 
 func TestInitialize(t *testing.T) {

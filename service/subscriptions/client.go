@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/samaasi/paystack-sdk-go/internal/backend"
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/internal/backend"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 )
 
 // Service represents the interface for subscriptions operations.

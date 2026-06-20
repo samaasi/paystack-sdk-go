@@ -3,7 +3,7 @@ package misc
 import (
 	"encoding/json"
 
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 )
 
 type Bank struct {

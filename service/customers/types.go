@@ -1,7 +1,7 @@
 package customers
 
 import (
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 )
 
 // CreateCustomerRequest represents the request to create a customer

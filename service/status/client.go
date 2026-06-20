@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/samaasi/paystack-sdk-go/internal/backend"
+	"github.com/samaasi/paystack-sdk-go/v2/internal/backend"
 )
 
 const DefaultStatusURL = "https://status.paystack.com/api/v2/summary.json"

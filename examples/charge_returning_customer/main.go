@@ -8,9 +8,9 @@ import (
 	"log"
 	"os"
 
-	paystack "github.com/samaasi/paystack-sdk-go"
-	"github.com/samaasi/paystack-sdk-go/paystackapi"
-	"github.com/samaasi/paystack-sdk-go/service/transactions"
+	paystack "github.com/samaasi/paystack-sdk-go/v2"
+	"github.com/samaasi/paystack-sdk-go/v2/paystackapi"
+	"github.com/samaasi/paystack-sdk-go/v2/service/transactions"
 )
 
 func main() {

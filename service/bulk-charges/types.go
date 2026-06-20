@@ -1,6 +1,6 @@
 package bulkcharges
 
-import "github.com/samaasi/paystack-sdk-go/paystackapi"
+import "github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 
 // BulkChargeUnit represents a single charge in a bulk request
 type BulkChargeUnit struct {

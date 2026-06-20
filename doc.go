@@ -8,7 +8,7 @@
 //
 //	import (
 //		"os"
-//		paystack "github.com/samaasi/paystack-sdk-go"
+//		paystack "github.com/samaasi/paystack-sdk-go/v2"
 //	)
 //
 //	func main() {

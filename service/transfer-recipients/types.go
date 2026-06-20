@@ -1,6 +1,6 @@
 package transferRecipients
 
-import "github.com/samaasi/paystack-sdk-go/paystackapi"
+import "github.com/samaasi/paystack-sdk-go/v2/paystackapi"
 
 type Recipient struct {
 	ID            int    `json:"id"`
